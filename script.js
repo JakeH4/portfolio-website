@@ -1,3 +1,73 @@
+/* ===== PAGE LOADER ===== */
+
+function initLoader()
+{
+    var overlay = document.getElementById('loaderOverlay');
+    var heroContent = document.querySelector('.hero-content');
+
+    setTimeout(function()
+    {
+        overlay.classList.add('hidden');
+        if (heroContent)
+        {
+            heroContent.classList.remove('hero-hidden');
+            heroContent.classList.add('hero-reveal');
+        }
+    }, 1500);
+}
+
+/* ===== SCROLL PROGRESS BAR ===== */
+
+function initScrollProgress()
+{
+    var progressBar = document.getElementById('scrollProgress');
+
+    window.addEventListener('scroll', function()
+    {
+        var scrollTop = window.scrollY;
+        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        var scrollPercent = (scrollTop / docHeight) * 100;
+        progressBar.style.width = scrollPercent + '%';
+    });
+}
+
+/* ===== PAGE TRANSITIONS ===== */
+
+function initPageTransitions()
+{
+    var pageContent = document.querySelector('.page-content');
+    if (!pageContent) return;
+
+    document.addEventListener('click', function(e)
+    {
+        var link = e.target.closest('a');
+        if (!link) return;
+
+        var href = link.getAttribute('href');
+        if (!href) return;
+
+        // Only intercept internal .html links (not anchors, not external)
+        if (href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto'))
+        {
+            return;
+        }
+
+        // Skip download links
+        if (link.hasAttribute('download'))
+        {
+            return;
+        }
+
+        e.preventDefault();
+        pageContent.classList.add('fade-out');
+
+        setTimeout(function()
+        {
+            window.location.href = href;
+        }, 300);
+    });
+}
+
 /* ===== SCROLL ANIMATIONS ===== */
 
 function initScrollAnimations()
@@ -142,9 +212,12 @@ function initNavbarScroll()
 
 document.addEventListener('DOMContentLoaded', function()
 {
+    initLoader();
     initScrollAnimations();
     initActiveNav();
     initBackToTop();
     initMobileNav();
     initNavbarScroll();
+    initScrollProgress();
+    initPageTransitions();
 });

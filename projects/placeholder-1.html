@@ -15,7 +15,7 @@
     </head>
 
     <body>
-        <div class="project-page">
+        <div class="project-page fade-in">
             <a href="../index.html" class="back-link">&#8592; Back to Portfolio</a>
 
             <h1 class="project-page-title">Project Coming Soon</h1>
@@ -33,5 +33,21 @@
                 </p>
             </div>
         </div>
+
+        <script>
+        document.addEventListener('click', function(e)
+        {
+            var link = e.target.closest('.back-link');
+            if (!link) return;
+            e.preventDefault();
+            var page = document.querySelector('.project-page');
+            page.style.transition = 'opacity 0.3s ease';
+            page.style.opacity = '0';
+            setTimeout(function()
+            {
+                window.location.href = link.getAttribute('href');
+            }, 300);
+        });
+        </script>
     </body>
 </html>
