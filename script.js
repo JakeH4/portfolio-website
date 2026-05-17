@@ -1,21 +1,3 @@
-/* ===== PAGE LOADER ===== */
-
-function initLoader()
-{
-    var overlay = document.getElementById('loaderOverlay');
-    var heroReveal = document.querySelector('.hero-grid, .hero-content');
-
-    setTimeout(function()
-    {
-        overlay.classList.add('hidden');
-        if (heroReveal)
-        {
-            heroReveal.classList.remove('hero-hidden');
-            heroReveal.classList.add('hero-reveal');
-        }
-    }, 700);
-}
-
 /* ===== SCROLL PROGRESS BAR ===== */
 
 function initScrollProgress()
@@ -212,7 +194,6 @@ function initNavbarScroll()
 
 document.addEventListener('DOMContentLoaded', function()
 {
-    initLoader();
     initScrollAnimations();
     initActiveNav();
     initBackToTop();
