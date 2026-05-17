@@ -10,7 +10,7 @@
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
 
         <link rel="stylesheet" href="style.css">
     </head>
@@ -28,10 +28,10 @@
             <nav id="navbar">
                 <a href="#hero" class="nav-logo">JH</a>
                 <div class="nav-links">
-                    <a href="#hero" class="nav-link"><span class="nav-num">01.</span>About</a>
-                    <a href="#skills" class="nav-link"><span class="nav-num">02.</span>Skills</a>
-                    <a href="#projects" class="nav-link"><span class="nav-num">03.</span>Projects</a>
-                    <a href="#personal" class="nav-link"><span class="nav-num">04.</span>Personal</a>
+                    <a href="#hero" class="nav-link">About</a>
+                    <a href="#skills" class="nav-link">Skills</a>
+                    <a href="#projects" class="nav-link">Projects</a>
+                    <a href="#personal" class="nav-link">Personal</a>
                     <a href="assets/Jake_Huebner_Resume.pdf" download class="nav-link nav-cta">Resume</a>
                 </div>
                 <button class="nav-toggle" aria-label="Toggle navigation">
@@ -47,7 +47,7 @@
             <div class="hero-grid hero-hidden">
                 <div class="hero-content">
                     <p class="hero-eyebrow">Hi, I'm</p>
-                    <h1 class="hero-name">Jake Huebner.</h1>
+                    <h1 class="hero-name">Jake Huebner</h1>
                     <p class="hero-tagline">
                         Computer Science student. <br>
                         <span class="accent">Builder, engineer, perpetual learner.</span>
@@ -90,18 +90,9 @@
                     </div>
                 </div>
 
-                <!--
-                  HEADSHOT
-                  Drop your photo at: assets/headshot.jpg
-                  Then replace the .hero-photo-placeholder div below with:
-                  <img src="assets/headshot.jpg" alt="Jake Huebner" class="hero-photo-img" />
-                -->
                 <div class="hero-photo">
                     <div class="hero-photo-frame">
-                        <div class="hero-photo-placeholder">
-                            <span class="placeholder-monogram">JH</span>
-                            <span class="placeholder-label">Headshot</span>
-                        </div>
+                        <img src="assets/headshot.jpg" alt="Jake Huebner" class="hero-photo-img" />
                     </div>
                 </div>
             </div>
@@ -109,17 +100,13 @@
 
         <!-- SKILLS -->
         <section id="skills" class="section">
-            <p class="section-eyebrow animate">02. Skills</p>
-            <h2 class="section-title animate">What I work with.</h2>
+            <h2 class="section-title animate">What I work with</h2>
             <p class="skills-intro animate">
                 A snapshot of the tools and ideas I keep coming back to. Always open to picking up new ones.
             </p>
             <div class="skills-grid">
                 <div class="skill-card animate">
-                    <div class="skill-card-head">
-                        <span class="skill-icon">&lt;/&gt;</span>
-                        <h3>Languages</h3>
-                    </div>
+                    <h3>Languages</h3>
                     <div class="skill-tags">
                         <span class="tag">Java</span>
                         <span class="tag">Python</span>
@@ -129,11 +116,7 @@
                     </div>
                 </div>
                 <div class="skill-card animate">
-                    <div class="skill-icon-wrap"></div>
-                    <div class="skill-card-head">
-                        <span class="skill-icon">{ }</span>
-                        <h3>Web</h3>
-                    </div>
+                    <h3>Web</h3>
                     <div class="skill-tags">
                         <span class="tag">HTML</span>
                         <span class="tag">CSS</span>
@@ -142,10 +125,7 @@
                     </div>
                 </div>
                 <div class="skill-card animate">
-                    <div class="skill-card-head">
-                        <span class="skill-icon">~/</span>
-                        <h3>Tools</h3>
-                    </div>
+                    <h3>Tools</h3>
                     <div class="skill-tags">
                         <span class="tag">VS Code</span>
                         <span class="tag">IntelliJ</span>
@@ -154,10 +134,7 @@
                     </div>
                 </div>
                 <div class="skill-card animate">
-                    <div class="skill-card-head">
-                        <span class="skill-icon">#</span>
-                        <h3>Concepts</h3>
-                    </div>
+                    <h3>Concepts</h3>
                     <div class="skill-tags">
                         <span class="tag">OOP</span>
                         <span class="tag">Algorithms</span>
@@ -170,8 +147,7 @@
 
         <!-- PROJECTS -->
         <section id="projects" class="section">
-            <p class="section-eyebrow animate">03. Projects</p>
-            <h2 class="section-title animate">Things I've built.</h2>
+            <h2 class="section-title animate">Things I've built</h2>
             <p class="projects-intro animate">
                 Project pages are coming soon — write-ups, screenshots, and code links will land here as I finish them.
             </p>
@@ -233,17 +209,16 @@
 
         <!-- PERSONAL -->
         <section id="personal" class="section">
-            <p class="section-eyebrow animate">04. Personal</p>
-            <h2 class="section-title animate">Outside of code.</h2>
+            <h2 class="section-title animate">Outside of code</h2>
             <div class="personal-placeholder animate">
-                <span class="placeholder-tag">PLACEHOLDER</span>
-                <p>Content coming soon — Jake will fill this in.</p>
+                <p class="placeholder-text">PLACEHOLDER</p>
+                <p class="placeholder-sub">Content coming soon.</p>
             </div>
         </section>
 
         <!-- FOOTER -->
         <footer>
-            <p class="footer-copy">&copy; 2026 Jake Huebner · Built with care.</p>
+            <p class="footer-copy">&copy; 2026 Jake Huebner</p>
         </footer>
 
         <button id="backToTop" aria-label="Scroll to top">&#8593;</button>
