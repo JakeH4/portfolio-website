@@ -3,13 +3,14 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="theme-color" content="#0a0a0f">
+        <meta name="theme-color" content="#01161E">
 
-        <title>Jake Huebner - Portfolio</title>
+        <title>Jake Huebner — Computer Science Student & Developer</title>
+        <meta name="description" content="Jake Huebner — Computer Science student at CU Boulder, marathon runner, and developer interested in software, AI, and cybersecurity.">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
         <link rel="stylesheet" href="style.css">
     </head>
@@ -17,7 +18,7 @@
     <body>
         <div id="scrollProgress"></div>
 
-        <!-- LOADER OVERLAY -->
+        <!-- LOADER -->
         <div class="loader-overlay" id="loaderOverlay">
             <span class="loader-initials">JH</span>
         </div>
@@ -27,12 +28,11 @@
             <nav id="navbar">
                 <a href="#hero" class="nav-logo">JH</a>
                 <div class="nav-links">
-                    <a href="#about" class="nav-link">About</a>
-                    <a href="#skills" class="nav-link">Skills</a>
-                    <a href="#projects" class="nav-link">Projects</a>
-                    <a href="#education" class="nav-link">Education</a>
-                    <a href="#experience" class="nav-link">Experience</a>
-                    <a href="#contact" class="nav-link">Contact</a>
+                    <a href="#hero" class="nav-link"><span class="nav-num">01.</span>About</a>
+                    <a href="#skills" class="nav-link"><span class="nav-num">02.</span>Skills</a>
+                    <a href="#projects" class="nav-link"><span class="nav-num">03.</span>Projects</a>
+                    <a href="#contact" class="nav-link"><span class="nav-num">04.</span>Contact</a>
+                    <a href="assets/Jake_Huebner_Resume.pdf" download class="nav-link nav-cta">Resume</a>
                 </div>
                 <button class="nav-toggle" aria-label="Toggle navigation">
                     <span></span>
@@ -42,51 +42,62 @@
             </nav>
         </header>
 
-        <!-- HERO -->
+        <!-- HERO / ABOUT -->
         <section id="hero" class="hero">
             <div class="hero-content hero-hidden">
-                <p class="hero-greeting">Hi, I'm</p>
-                <h1 class="hero-name">Jake Huebner</h1>
-                <p class="hero-tagline">Computer Science Student &amp; Developer</p>
-                <p class="hero-description">
-                    Passionate about software development, AI, and cybersecurity.
-                    Currently studying at CU Boulder.
+                <p class="hero-eyebrow">Hi, I'm</p>
+                <h1 class="hero-name">Jake Huebner.</h1>
+                <p class="hero-tagline">
+                    Computer Science student. <br>
+                    <span class="accent">Builder, runner, perpetual learner.</span>
                 </p>
+
+                <div class="hero-bio">
+                    <p>
+                        I'm a <span class="highlight">CS major at the University of Colorado Boulder</span>
+                        with a minor in business, graduating in summer 2026. I'm drawn to the spots where
+                        software gets interesting — building things end-to-end, exploring AI and machine learning,
+                        and poking at systems through the lens of cybersecurity.
+                    </p>
+                    <p>
+                        Outside of code, I run marathons, snowboard the Front Range, play in a worship band,
+                        lead a high-school ministry, and serve as president of Alpha Gamma Omega, the Christian
+                        fraternity at CU. Ask me about geography — I will not stop.
+                    </p>
+                </div>
+
                 <div class="hero-cta">
                     <a href="#projects" class="btn btn-primary">View My Work</a>
-                    <a href="#contact" class="btn btn-outline">Get in Touch</a>
-                    <a href="assets/Jake_Huebner_Resume.pdf" download class="btn btn-outline">Download Resume</a>
+                    <a href="assets/Jake_Huebner_Resume.pdf" download class="btn btn-outline">Resume</a>
+                    <div class="hero-socials">
+                        <a href="https://github.com/JakeH4" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-3.795-.735-.54-1.38-1.32-1.74-1.32-1.74-1.08-.735.084-.72.084-.72 1.2.084 1.83 1.23 1.83 1.23 1.065 1.815 2.79 1.29 3.465.99.105-.765.42-1.29.765-1.59-2.655-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.545 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.92 1.23 3.225 0 4.605-2.805 5.625-5.475 5.92.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                            </svg>
+                        </a>
+                        <a href="https://www.linkedin.com/in/jake-huebner-424bb4238/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <div class="hero-bg-glow"></div>
-        </section>
-
-        <!-- ABOUT -->
-        <section id="about" class="section">
-            <h2 class="section-title animate">About Me</h2>
-            <div class="about-content animate">
-                <p>
-                    I am a computer science major at the University of Colorado Boulder
-                    with a minor in business. I am interested in software development,
-                    AI, and cybersecurity.
-                </p>
-                <p>
-                    Outside of school I am quite active and involved in a worship band,
-                    I am a high school ministry leader, and I am the president of
-                    Alpha Gamma Omega, the Christian fraternity. I enjoy spending time
-                    running, snowboarding, and hanging out with friends. I am also a
-                    huge geography nerd and can talk about niche topics forever!
-                </p>
             </div>
         </section>
 
         <!-- SKILLS -->
         <section id="skills" class="section">
-            <h2 class="section-title animate">Skills</h2>
+            <p class="section-eyebrow animate">02. Skills</p>
+            <h2 class="section-title animate">What I work with.</h2>
+            <p class="skills-intro animate">
+                A snapshot of the tools and ideas I keep coming back to. Always open to picking up new ones.
+            </p>
             <div class="skills-grid">
                 <div class="skill-card animate">
-                    <div class="skill-icon">&lt;/&gt;</div>
-                    <h3>Languages</h3>
+                    <div class="skill-card-head">
+                        <span class="skill-icon">&lt;/&gt;</span>
+                        <h3>Languages</h3>
+                    </div>
                     <div class="skill-tags">
                         <span class="tag">Java</span>
                         <span class="tag">Python</span>
@@ -96,8 +107,11 @@
                     </div>
                 </div>
                 <div class="skill-card animate">
-                    <div class="skill-icon">&#127760;</div>
-                    <h3>Web Dev</h3>
+                    <div class="skill-icon-wrap"></div>
+                    <div class="skill-card-head">
+                        <span class="skill-icon">{ }</span>
+                        <h3>Web</h3>
+                    </div>
                     <div class="skill-tags">
                         <span class="tag">HTML</span>
                         <span class="tag">CSS</span>
@@ -106,23 +120,27 @@
                     </div>
                 </div>
                 <div class="skill-card animate">
-                    <div class="skill-icon">&#9881;</div>
-                    <h3>Tools</h3>
+                    <div class="skill-card-head">
+                        <span class="skill-icon">~/</span>
+                        <h3>Tools</h3>
+                    </div>
                     <div class="skill-tags">
-                        <span class="tag">VSCode</span>
+                        <span class="tag">VS Code</span>
                         <span class="tag">IntelliJ</span>
                         <span class="tag">Git</span>
                         <span class="tag">GitHub</span>
                     </div>
                 </div>
                 <div class="skill-card animate">
-                    <div class="skill-icon">&#128161;</div>
-                    <h3>Concepts</h3>
+                    <div class="skill-card-head">
+                        <span class="skill-icon">#</span>
+                        <h3>Concepts</h3>
+                    </div>
                     <div class="skill-tags">
                         <span class="tag">OOP</span>
                         <span class="tag">Algorithms</span>
                         <span class="tag">Cybersecurity</span>
-                        <span class="tag">AI</span>
+                        <span class="tag">AI / ML</span>
                     </div>
                 </div>
             </div>
@@ -130,131 +148,86 @@
 
         <!-- PROJECTS -->
         <section id="projects" class="section">
-            <h2 class="section-title animate">Projects</h2>
+            <p class="section-eyebrow animate">03. Projects</p>
+            <h2 class="section-title animate">Things I've built.</h2>
+            <p class="projects-intro animate">
+                Project pages are coming soon — write-ups, screenshots, and code links will land here as I finish them.
+            </p>
             <div class="projects-grid">
                 <a href="projects/slim-stow.html" class="project-card-link animate">
-                    <div class="project-card">
+                    <div class="project-card is-placeholder">
                         <div class="project-card-header">
-                            <span class="project-icon">&#128230;</span>
+                            <span class="project-icon">&#9881;</span>
                             <span class="project-link-icon" aria-label="View project">&#8599;</span>
                         </div>
-                        <h3>Slim Stow Rooftop Cargo Carrier</h3>
-                        <p>Designed and developed a rooftop cargo carrier product focusing on market differentiation.</p>
+                        <h3>Slim Stow Rooftop Carrier</h3>
+                        <p>Product design and market research for a low-profile rooftop cargo carrier. Write-up under construction.</p>
                         <div class="project-tags">
-                            <span class="tag">Product Design</span>
-                            <span class="tag">Market Research</span>
+                            <span class="tag">Under Construction</span>
                         </div>
                     </div>
                 </a>
                 <a href="projects/cybersecurity.html" class="project-card-link animate">
-                    <div class="project-card">
+                    <div class="project-card is-placeholder">
                         <div class="project-card-header">
-                            <span class="project-icon">&#128274;</span>
+                            <span class="project-icon">&#9670;</span>
                             <span class="project-link-icon" aria-label="View project">&#8599;</span>
                         </div>
-                        <h3>Cybersecurity Projects</h3>
-                        <p>Penetration testing, XSS exploitation, and forensic analysis projects from CSCI 3403.</p>
+                        <h3>Cybersecurity Coursework</h3>
+                        <p>Pen testing, XSS exploitation, and forensic analysis from CSCI 3403. Write-up under construction.</p>
                         <div class="project-tags">
-                            <span class="tag">Cybersecurity</span>
-                            <span class="tag">Pen Testing</span>
-                            <span class="tag">Forensics</span>
+                            <span class="tag">Under Construction</span>
                         </div>
                     </div>
                 </a>
                 <a href="projects/placeholder-1.html" class="project-card-link animate">
-                    <div class="project-card">
+                    <div class="project-card is-placeholder">
                         <div class="project-card-header">
-                            <span class="project-icon">&#128187;</span>
+                            <span class="project-icon">&#9678;</span>
                             <span class="project-link-icon" aria-label="View project">&#8599;</span>
                         </div>
-                        <h3>Placeholder</h3>
-                        <p>Project details coming soon. Check back for updates!</p>
+                        <h3>Running Form Analyzer</h3>
+                        <p>A pose-estimation + classifier pipeline for analyzing running form. ML coursework project, in progress.</p>
                         <div class="project-tags">
-                            <span class="tag">Coming Soon</span>
+                            <span class="tag">Under Construction</span>
                         </div>
                     </div>
                 </a>
                 <a href="projects/placeholder-2.html" class="project-card-link animate">
-                    <div class="project-card">
+                    <div class="project-card is-placeholder">
                         <div class="project-card-header">
-                            <span class="project-icon">&#128736;</span>
+                            <span class="project-icon">&#9633;</span>
                             <span class="project-link-icon" aria-label="View project">&#8599;</span>
                         </div>
-                        <h3>Placeholder</h3>
-                        <p>Project details coming soon. Check back for updates!</p>
+                        <h3>More Coming Soon</h3>
+                        <p>Additional projects will appear here as they're finished and written up.</p>
                         <div class="project-tags">
-                            <span class="tag">Coming Soon</span>
+                            <span class="tag">Under Construction</span>
                         </div>
                     </div>
                 </a>
             </div>
         </section>
 
-        <!-- EDUCATION -->
-        <section id="education" class="section">
-            <h2 class="section-title animate">Education</h2>
-            <div class="timeline">
-                <div class="timeline-item animate">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <h3>University of Colorado Boulder</h3>
-                        <p class="degree">B.S. in Computer Science, Minor in Business</p>
-                        <p class="date">Expected Graduation: Summer 2026</p>
-                        <p class="coursework">Relevant Coursework: Object-Oriented Analysis and Design,
-                            Artificial Intelligence, Cybersecurity, Principles of Programming Languages</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- EXPERIENCE & LEADERSHIP -->
-        <section id="experience" class="section">
-            <h2 class="section-title animate">Experience &amp; Leadership</h2>
-            <div class="timeline">
-                <div class="timeline-item animate">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <h3>President</h3>
-                        <p class="role-org">Alpha Gamma Omega — Christian Fraternity</p>
-                        <p class="date">2024 – Present</p>
-                        <p class="role-description">Leading chapter operations, organizing events, and fostering a community centered on faith, brotherhood, and service.</p>
-                    </div>
-                </div>
-                <div class="timeline-item animate">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <h3>High School Ministry Leader</h3>
-                        <p class="role-org">Church Ministry</p>
-                        <p class="date">2023 – Present</p>
-                        <p class="role-description">Mentoring and leading high school students through weekly meetings, discussions, and community outreach activities.</p>
-                    </div>
-                </div>
-                <div class="timeline-item animate">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <h3>Worship Band Member</h3>
-                        <p class="role-org">Worship Team</p>
-                        <p class="date">2022 – Present</p>
-                        <p class="role-description">Performing and collaborating with the worship team for weekly services and special events.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- FOOTER / CONTACT -->
-        <footer id="contact" class="section">
+        <footer id="contact">
             <div class="footer-content animate">
-                <h2 class="section-title">Get in Touch</h2>
-                <p class="footer-email">jakehuebner4@gmail.com</p>
-                <p class="footer-email">(214) 957-2344</p>
+                <p class="footer-eyebrow">04. Contact</p>
+                <h2 class="footer-title">Let's talk.</h2>
+                <p class="footer-blurb">
+                    Whether it's a project, a question, or just a good conversation —
+                    my inbox is open.
+                </p>
+                <a href="mailto:jakehuebner4@gmail.com" class="footer-email">jakehuebner4@gmail.com</a>
+                <span class="footer-phone">(214) 957-2344</span>
                 <div class="social-links">
                     <a href="https://github.com/JakeH4" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
                             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-3.795-.735-.54-1.38-1.32-1.74-1.32-1.74-1.08-.735.084-.72.084-.72 1.2.084 1.83 1.23 1.83 1.23 1.065 1.815 2.79 1.29 3.465.99.105-.765.42-1.29.765-1.59-2.655-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.545 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.92 1.23 3.225 0 4.605-2.805 5.625-5.475 5.92.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
                         </svg>
                     </a>
                     <a href="https://www.linkedin.com/in/jake-huebner-424bb4238/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
                             <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                         </svg>
                     </a>

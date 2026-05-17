@@ -13,7 +13,7 @@ function initLoader()
             heroContent.classList.remove('hero-hidden');
             heroContent.classList.add('hero-reveal');
         }
-    }, 1500);
+    }, 700);
 }
 
 /* ===== SCROLL PROGRESS BAR ===== */
@@ -198,12 +198,12 @@ function initNavbarScroll()
         if (window.scrollY > 50)
         {
             navbar.style.borderBottomColor = 'var(--border-subtle)';
-            navbar.style.background = 'rgba(10, 10, 15, 0.95)';
+            navbar.style.background = 'rgba(1, 22, 30, 0.92)';
         }
         else
         {
             navbar.style.borderBottomColor = 'transparent';
-            navbar.style.background = 'rgba(10, 10, 15, 0.8)';
+            navbar.style.background = 'rgba(1, 22, 30, 0.65)';
         }
     });
 }
