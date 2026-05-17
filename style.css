@@ -9,10 +9,10 @@
     --beige: #EFF6E0;
 
     --bg-primary: var(--ink-black);
-    --bg-surface: #07222C;
-    --bg-elevated: #0d3344;
-    --border-subtle: rgba(89, 131, 146, 0.22);
-    --border-strong: rgba(89, 131, 146, 0.45);
+    --bg-surface: #0d3344;
+    --bg-elevated: var(--dark-teal);
+    --border-subtle: rgba(89, 131, 146, 0.32);
+    --border-strong: rgba(174, 195, 176, 0.55);
 
     --text-primary: var(--beige);
     --text-secondary: var(--ash-grey);
@@ -62,7 +62,7 @@ body
     -webkit-font-smoothing: antialiased;
 }
 
-/* Quiet, painterly background — two soft washes from the palette */
+/* Painterly background — Ocean Serenity washes flowing across the page */
 body::before
 {
     content: '';
@@ -71,8 +71,9 @@ body::before
     pointer-events: none;
     z-index: 0;
     background-image:
-        radial-gradient(ellipse at 15% 20%, rgba(18, 69, 89, 0.55) 0%, transparent 55%),
-        radial-gradient(ellipse at 85% 80%, rgba(89, 131, 146, 0.18) 0%, transparent 60%);
+        radial-gradient(ellipse 70% 55% at 10% 15%, rgba(18, 69, 89, 0.85) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 90% 85%, rgba(89, 131, 146, 0.35) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(174, 195, 176, 0.06) 0%, transparent 70%);
 }
 
 body > *
@@ -304,12 +305,100 @@ header
     overflow: hidden;
 }
 
-.hero-content
+.hero-grid
 {
     position: relative;
     z-index: 1;
-    max-width: 820px;
     width: 100%;
+    max-width: 1120px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 4rem;
+    align-items: center;
+}
+
+.hero-content
+{
+    min-width: 0;
+}
+
+/* ===== HEADSHOT ===== */
+
+.hero-photo
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-photo-frame
+{
+    position: relative;
+    width: clamp(220px, 28vw, 320px);
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    padding: 6px;
+    background: var(--gradient);
+    box-shadow:
+        0 20px 60px rgba(1, 22, 30, 0.55),
+        0 0 0 1px rgba(174, 195, 176, 0.15),
+        0 0 80px rgba(89, 131, 146, 0.25);
+}
+
+.hero-photo-frame::before
+{
+    content: '';
+    position: absolute;
+    inset: -14px;
+    border-radius: 50%;
+    border: 1px dashed rgba(174, 195, 176, 0.25);
+    pointer-events: none;
+}
+
+.hero-photo-img,
+.hero-photo-placeholder
+{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: block;
+    object-fit: cover;
+    background: var(--bg-elevated);
+    overflow: hidden;
+}
+
+.hero-photo-placeholder
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    background:
+        radial-gradient(circle at 30% 30%, rgba(174, 195, 176, 0.18) 0%, transparent 60%),
+        var(--bg-elevated);
+    color: var(--text-secondary);
+}
+
+.placeholder-monogram
+{
+    font-family: var(--font-heading);
+    font-size: clamp(2.4rem, 5vw, 3.4rem);
+    font-weight: 700;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 0.02em;
+}
+
+.placeholder-label
+{
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
 }
 
 .hero-eyebrow
@@ -337,11 +426,14 @@ header
 .hero-name
 {
     font-family: var(--font-heading);
-    font-size: clamp(3rem, 9vw, 5.75rem);
+    font-size: clamp(3rem, 8.5vw, 5.5rem);
     font-weight: 700;
     line-height: 1.02;
     letter-spacing: -0.02em;
-    color: var(--text-primary);
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     margin-bottom: 0.5rem;
 }
 
@@ -1072,7 +1164,7 @@ footer
 
 /* ===== RESPONSIVE: TABLET ===== */
 
-@media screen and (max-width: 820px)
+@media screen and (max-width: 880px)
 {
     .skills-grid
     {
@@ -1087,6 +1179,35 @@ footer
     .hero
     {
         padding: 7rem 1.5rem 4rem;
+    }
+
+    .hero-grid
+    {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+        text-align: center;
+    }
+
+    .hero-photo
+    {
+        order: -1;
+    }
+
+    .hero-eyebrow,
+    .hero-bio
+    {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-eyebrow::before
+    {
+        display: none;
+    }
+
+    .hero-cta
+    {
+        justify-content: center;
     }
 }
 
