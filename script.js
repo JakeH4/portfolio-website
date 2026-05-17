@@ -3,15 +3,15 @@
 function initLoader()
 {
     var overlay = document.getElementById('loaderOverlay');
-    var heroContent = document.querySelector('.hero-content');
+    var heroReveal = document.querySelector('.hero-grid, .hero-content');
 
     setTimeout(function()
     {
         overlay.classList.add('hidden');
-        if (heroContent)
+        if (heroReveal)
         {
-            heroContent.classList.remove('hero-hidden');
-            heroContent.classList.add('hero-reveal');
+            heroReveal.classList.remove('hero-hidden');
+            heroReveal.classList.add('hero-reveal');
         }
     }, 700);
 }
