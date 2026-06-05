@@ -927,6 +927,360 @@ footer
     margin: 0 auto;
 }
 
+/* ===== PROJECT DETAIL — RICH CONTENT ===== */
+
+.project-eyebrow
+{
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ash-grey);
+    margin-bottom: 0.9rem;
+}
+
+.project-lead
+{
+    font-family: var(--font-heading);
+    font-size: clamp(1.15rem, 2.4vw, 1.4rem);
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    max-width: 60ch;
+    margin-bottom: 2rem;
+}
+
+.project-links
+{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 3rem;
+}
+
+.project-links .btn
+{
+    font-size: 0.88rem;
+}
+
+/* Hero figure (screenshot / chart) */
+.project-figure
+{
+    margin: 0 0 3rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    padding: 0.75rem;
+    overflow: hidden;
+}
+
+.project-figure img
+{
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+}
+
+.project-figure figcaption
+{
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-style: italic;
+    text-align: center;
+    padding: 0.85rem 0.5rem 0.35rem;
+    line-height: 1.5;
+}
+
+/* Stat row */
+.stat-grid
+{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.stat-card
+{
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    padding: 1.4rem 1.5rem;
+    transition: var(--transition);
+}
+
+.stat-card:hover
+{
+    border-color: var(--border-strong);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(1, 22, 30, 0.5);
+}
+
+.stat-value
+{
+    font-family: var(--font-heading);
+    font-size: clamp(1.7rem, 4vw, 2.1rem);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--beige);
+    letter-spacing: -0.01em;
+}
+
+.stat-label
+{
+    display: block;
+    margin-top: 0.4rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.45;
+}
+
+/* Content sections */
+.project-section
+{
+    margin-bottom: 3rem;
+}
+
+.project-section h2
+{
+    font-family: var(--font-heading);
+    font-size: clamp(1.4rem, 3vw, 1.7rem);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    margin-bottom: 1.1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.project-section p
+{
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 1.1rem;
+}
+
+.project-section p:last-child
+{
+    margin-bottom: 0;
+}
+
+.project-section a
+{
+    color: var(--ash-grey);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-subtle);
+    transition: var(--transition);
+}
+
+.project-section a:hover
+{
+    color: var(--beige);
+    border-bottom-color: var(--accent-soft);
+}
+
+.project-section strong
+{
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.project-section code
+{
+    font-family: 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+    font-size: 0.86em;
+    color: var(--ash-grey);
+    background: rgba(174, 195, 176, 0.08);
+    border: 1px solid rgba(174, 195, 176, 0.18);
+    border-radius: 5px;
+    padding: 0.08em 0.4em;
+}
+
+.project-list
+{
+    list-style: none;
+    padding: 0;
+}
+
+.project-list li
+{
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+.project-list li::before
+{
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.project-list li:last-child
+{
+    margin-bottom: 0;
+}
+
+/* Results table */
+.table-wrap
+{
+    overflow-x: auto;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    margin-bottom: 1.25rem;
+}
+
+.result-table
+{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    min-width: 460px;
+}
+
+.result-table th,
+.result-table td
+{
+    padding: 0.8rem 1.1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.result-table thead th
+{
+    background: rgba(89, 131, 146, 0.16);
+    color: var(--beige);
+    font-weight: 600;
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+}
+
+.result-table tbody tr:last-child td
+{
+    border-bottom: none;
+}
+
+.result-table tbody tr:hover
+{
+    background: rgba(174, 195, 176, 0.05);
+}
+
+.result-table td
+{
+    color: var(--text-secondary);
+}
+
+.result-table td:first-child
+{
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.result-table .num
+{
+    font-variant-numeric: tabular-nums;
+}
+
+.result-table .highlight-row td:first-child
+{
+    color: var(--ash-grey);
+}
+
+/* Callout / key insight */
+.callout
+{
+    background: linear-gradient(180deg, rgba(89, 131, 146, 0.14) 0%, rgba(89, 131, 146, 0.05) 100%);
+    border: 1px solid var(--border-subtle);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 3rem;
+}
+
+.callout-label
+{
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ash-grey);
+    margin-bottom: 0.6rem;
+}
+
+.callout p
+{
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin: 0;
+}
+
+.callout strong
+{
+    color: var(--beige);
+    font-weight: 600;
+}
+
+/* Two-column feature grid (e.g. design patterns) */
+.feature-grid
+{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1rem;
+}
+
+.feature-card
+{
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    padding: 1.4rem 1.5rem;
+    transition: var(--transition);
+}
+
+.feature-card:hover
+{
+    border-color: var(--border-strong);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(1, 22, 30, 0.5);
+}
+
+.feature-card h3
+{
+    font-family: var(--font-heading);
+    font-size: 1.08rem;
+    font-weight: 600;
+    color: var(--beige);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+}
+
+.feature-card p
+{
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.65;
+    margin: 0;
+}
+
+@media screen and (max-width: 600px)
+{
+    .project-figure
+    {
+        padding: 0.5rem;
+    }
+}
+
 /* ===== PAGE TRANSITIONS ===== */
 
 .page-content

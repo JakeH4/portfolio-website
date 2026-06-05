@@ -26,14 +26,21 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&display=swap" rel="stylesheet">
 
-        <link rel="stylesheet" href="../style.css?v=2">
+        <link rel="stylesheet" href="../style.css?v=3">
     </head>
 
     <body>
         <div class="project-page fade-in">
             <a href="../index.html" class="back-link">&#8592; Back to Portfolio</a>
 
+            <p class="project-eyebrow">Object-Oriented Design &middot; CSCI 4448</p>
             <h1 class="project-page-title">OmniFlow &mdash; City Traffic Simulator</h1>
+
+            <p class="project-lead">
+                A real-time 2D traffic simulator where cars, buses, emergency vehicles, bikes, and
+                pedestrians all move through one shared, polymorphic agent model &mdash; built to show
+                clean object-oriented design from the engine up.
+            </p>
 
             <div class="project-page-tags">
                 <span class="tag">Java 17</span>
@@ -42,18 +49,122 @@
                 <span class="tag">JUnit 5</span>
             </div>
 
-            <div class="project-page-body">
+            <div class="project-links">
+                <a href="https://github.com/ProofLion/4448-project-OmniFlow" target="_blank" rel="noopener noreferrer" class="btn btn-outline">View on GitHub &#8599;</a>
+            </div>
+
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <span class="stat-value">5</span>
+                    <span class="stat-label">polymorphic agent types</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">4</span>
+                    <span class="stat-label">classic design patterns applied</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">5</span>
+                    <span class="stat-label">JUnit 5 test suites</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">2</span>
+                    <span class="stat-label">person team</span>
+                </div>
+            </div>
+
+            <section class="project-section">
+                <h2>Overview</h2>
                 <p>
-                    Built a real-time 2D traffic simulation engine modeling five polymorphic
-                    agent types (cars, buses, emergency vehicles, bikes, pedestrians) via a
-                    shared Agent interface.
+                    OmniFlow simulates a busy downtown intersection in real time &mdash; vehicles
+                    obeying signals, buses dwelling at stops, pedestrians crossing in phases, and
+                    emergency vehicles cutting through it all. It was the final project for CU
+                    Boulder's Object-Oriented Analysis &amp; Design course, built with a teammate
+                    (<a href="https://github.com/ProofLion/4448-project-OmniFlow" target="_blank" rel="noopener noreferrer">Evan&nbsp;Mohan</a>).
                 </p>
                 <p>
-                    Implemented simulation behaviors &mdash; emergency-vehicle preemption,
-                    bus-stop queueing, multi-phase pedestrian crossings &mdash; and verified
-                    core logic with five JUnit 5 test suites.
+                    The point was never hyper-realistic traffic modeling &mdash; it was to demonstrate
+                    clean object orientation: polymorphism, dependency injection, design patterns, a
+                    responsive JavaFX UI, and basic persistence, all structured so the architecture is
+                    easy to reason about and explain. We deliberately narrowed an early, broader idea
+                    down to a single polished scene because it was easier to finish well and defend.
+                </p>
+            </section>
+
+            <section class="project-section">
+                <h2>One interface, five behaviors</h2>
+                <p>
+                    Every moving thing on the map &mdash; car, bus, emergency vehicle, bike,
+                    pedestrian &mdash; is updated through a single shared <code>Agent</code> interface.
+                    The simulation engine stores and steps agents polymorphically, so each type varies
+                    its own behavior through small override hooks rather than sprawling
+                    <code>if/else</code> trees or <code>switch</code> statements. Adding a new agent
+                    type means writing a class, not editing the engine.
+                </p>
+            </section>
+
+            <section class="project-section">
+                <h2>Simulation behaviors</h2>
+                <ul class="project-list">
+                    <li><strong>Emergency preemption.</strong> A spawned emergency vehicle triggers a temporary all-red and clears the lane ahead, then despawns once it has cleared the scene.</li>
+                    <li><strong>Bus-stop dwell.</strong> Buses pause at stops while trailing vehicles queue up behind them rather than clipping through.</li>
+                    <li><strong>Phased pedestrian crossings.</strong> Directional walk signals with separate crossing phases, flashing countdowns, and longer walk windows so pedestrians finish crossing safely.</li>
+                    <li><strong>Lane-aware bikes.</strong> Bikes stay on sidewalk routes and stop short of pedestrian crosswalks.</li>
+                    <li><strong>Clean exits.</strong> Pedestrians and bikes leave the map at its edges instead of looping or teleporting back through the scene.</li>
+                </ul>
+                <p>
+                    The UI exposes start / pause / single-step controls, a speed slider, agent-type
+                    filtering, click-to-select agent details, manual emergency-vehicle spawning, and
+                    save/load of the layout state.
+                </p>
+            </section>
+
+            <section class="project-section">
+                <h2>Design patterns</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>Factory</h3>
+                        <p>An <code>AgentFactory</code> builds agents from shared type names; the engine and persistence layer code against an <code>AgentProvider</code> abstraction, never concrete classes.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Strategy</h3>
+                        <p>A <code>MapLayout</code> interface lets layouts be swapped in; the downtown layout owns its own signal timing, queueing, crossing rules, and preemption logic.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Template Method</h3>
+                        <p>A <code>BaseAgent</code> owns the shared update algorithm, and subclasses customize just the parts they need through small override hooks.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Observer / MVC</h3>
+                        <p>A controller wires UI actions to the model; JavaFX listeners react to control and selection changes, and rendering reads model state instead of owning logic.</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="callout">
+                <span class="callout-label">Design philosophy</span>
+                <p>
+                    The engine depends on <strong>abstractions, not implementations</strong> &mdash;
+                    <code>SimulationEngine</code> takes its world, agent provider, and random source
+                    through its constructor (dependency injection), and stores agents behind the
+                    <code>Agent</code> interface. The result is a simulation you can extend and test
+                    without reaching into its core.
                 </p>
             </div>
+
+            <section class="project-section">
+                <h2>Testing</h2>
+                <p>
+                    Coverage focuses where it matters most &mdash; the model and simulation logic
+                    rather than exhaustive UI testing &mdash; across five JUnit 5 suites:
+                </p>
+                <ul class="project-list">
+                    <li><strong>AgentFactoryTest</strong> &mdash; agents are created correctly from type names.</li>
+                    <li><strong>SimulationEngineTest</strong> &mdash; the engine steps the world and its injected dependencies as expected.</li>
+                    <li><strong>LayoutBehaviorTest</strong> &mdash; signal timing, queueing, and crossing rules behave correctly.</li>
+                    <li><strong>LayoutStoreTest</strong> &mdash; layout state survives a save/load round-trip.</li>
+                    <li><strong>Camera2DTest</strong> &mdash; the 2D camera transforms world and screen coordinates correctly.</li>
+                </ul>
+            </section>
         </div>
 
         <script>
