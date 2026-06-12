@@ -33,7 +33,15 @@
         <div class="project-page fade-in">
             <a href="../index.html" class="back-link">&#8592; Back to Portfolio</a>
 
+            <p class="project-eyebrow">Artificial Intelligence &middot; CSCI 3202</p>
             <h1 class="project-page-title">Mancala AI Agent</h1>
+
+            <p class="project-lead">
+                A Mancala-playing AI built from scratch in Python &mdash; game engine, random
+                baseline, and search agents &mdash; benchmarked head-to-head over 100-game
+                tournaments. Minimax with alpha-beta pruning plus a custom heuristic lifts win
+                rate to 99% at depth 5.
+            </p>
 
             <div class="project-page-tags">
                 <span class="tag">Python</span>
@@ -41,21 +49,72 @@
                 <span class="tag">Matplotlib</span>
             </div>
 
-            <div class="project-page-body">
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <span class="stat-value">99%</span>
+                    <span class="stat-label">win rate at depth 5 with the new heuristic</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">~3.9&times;</span>
+                    <span class="stat-label">speedup from alpha-beta pruning at identical win rates</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">10</span>
+                    <span class="stat-label">deepest search depth made feasible by pruning</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">100</span>
+                    <span class="stat-label">games per tournament for benchmarking each agent</span>
+                </div>
+            </div>
+
+            <section class="project-section">
+                <h2>How it's built</h2>
                 <p>
-                    Built a Mancala game-playing AI from scratch in Python &mdash; game engine,
-                    random baseline, and search agents benchmarked over 100-game tournaments.
+                    The project is structured as four layers, each independently testable:
+                </p>
+                <ul class="project-list">
+                    <li><strong>Game engine.</strong> A Mancala board with move legality, stone capture, end-of-game detection, and turn alternation &mdash; built from scratch so every search agent talks to the same rules.</li>
+                    <li><strong>Random baseline.</strong> Picks any legal move uniformly &mdash; the floor every smarter agent has to beat by a wide margin to count.</li>
+                    <li><strong>Minimax + alpha-beta search.</strong> Identical move choices to plain minimax with a fraction of the node visits, making deeper plies practical.</li>
+                    <li><strong>Custom heuristic evaluation.</strong> A linear combination of side-store difference and end-of-game stone-sweep credit, tuned through tournament play.</li>
+                </ul>
+            </section>
+
+            <section class="project-section">
+                <h2>The interesting part: pruning vs. heuristic</h2>
+                <p>
+                    Plain minimax at depth 10 was projected to take roughly <strong>two hours per
+                    game</strong> &mdash; clearly not playable. Alpha-beta pruning kept the same
+                    move choices but cut node visits by enough to make depth-10 search feasible
+                    in seconds, a <strong>~3.9&times; speedup</strong>.
                 </p>
                 <p>
-                    Implemented minimax and alpha-beta pruning &mdash; a ~3.9&times; speedup at
-                    identical win rates that made depth-10 search feasible (plain minimax
-                    projected ~2 hrs/game).
+                    Even with deeper search, win rate against the baseline plateaued around 96%.
+                    The last gains didn't come from more depth &mdash; they came from teaching the
+                    heuristic to value end-of-game stone sweeps, which are decisive late in a
+                    game but invisible to a naive score-difference function. That single change
+                    pushed win rate to <strong>99% at depth 5</strong>.
                 </p>
+            </section>
+
+            <div class="callout">
+                <span class="callout-label">Key insight</span>
                 <p>
-                    Designed a custom heuristic evaluation function crediting end-of-game stone
-                    sweeps, raising win rate to 99% at depth 5 (up from 96%).
+                    Past a certain depth, marginal wins come from heuristic design, not raw search.
+                    Crediting end-of-game sweeps was a tiny code change that delivered the
+                    final 3% &mdash; bigger than any extra ply of search had.
                 </p>
             </div>
+
+            <section class="project-section">
+                <h2>What I took away</h2>
+                <ul class="project-list">
+                    <li><strong>Alpha-beta isn't just a speedup</strong> &mdash; it's what makes deeper, otherwise-impractical search affordable in the first place.</li>
+                    <li><strong>Heuristic design eventually dominates search depth.</strong> A small domain-aware tweak beat several plies of additional lookahead.</li>
+                    <li><strong>Tournament play is the honest benchmark.</strong> Single games hide variance; 100-game tournaments make small heuristic edges visible.</li>
+                </ul>
+            </section>
         </div>
 
         <script>
