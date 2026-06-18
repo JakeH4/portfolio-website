@@ -6,19 +6,19 @@
         <meta name="theme-color" content="#01161E">
         <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 
-        <title>Running Form Analyzer — Jake Huebner</title>
+        <title>Running Form Analyzer | Jake Huebner</title>
         <meta name="description" content="Pose-estimation pipeline that engineers biomechanical features from running video and classifies form faults like overstriding and heel striking.">
 
         <meta property="og:type" content="article">
         <meta property="og:url" content="https://jakeahuebner.com/projects/running-form.html">
-        <meta property="og:title" content="Running Form Analyzer — Jake Huebner">
+        <meta property="og:title" content="Running Form Analyzer | Jake Huebner">
         <meta property="og:description" content="Pose-estimation pipeline that engineers biomechanical features from running video and classifies form faults like overstriding and heel striking.">
         <meta property="og:image" content="https://jakeahuebner.com/assets/og-running-form.png">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="627">
 
         <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="Running Form Analyzer — Jake Huebner">
+        <meta name="twitter:title" content="Running Form Analyzer | Jake Huebner">
         <meta name="twitter:description" content="Pose-estimation pipeline that engineers biomechanical features from running video and classifies form faults like overstriding and heel striking.">
         <meta name="twitter:image" content="https://jakeahuebner.com/assets/og-running-form.png">
 
@@ -26,7 +26,7 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&display=swap" rel="stylesheet">
 
-        <link rel="stylesheet" href="../style.css?v=3">
+        <link rel="stylesheet" href="../style.css?v=4">
     </head>
 
     <body>
@@ -57,7 +57,7 @@
             <figure class="project-figure">
                 <img src="../assets/running-form-demo.jpg" alt="The analyzer running live: pose landmarks overlaid on a runner, a real-time knee-angle readout, and a green border signalling the frame is trustworthy.">
                 <figcaption>
-                    The analyzer running live &mdash; MediaPipe landmarks overlaid, a real-time
+                    The analyzer running live: MediaPipe landmarks overlaid, a real-time
                     knee-angle readout, hip/knee/ankle markers, and a green border that signals the
                     frame is confident enough to trust.
                 </figcaption>
@@ -86,8 +86,8 @@
                 <h2>Why I built it</h2>
                 <p>
                     I'm a marathon runner with a history of recurring injuries, and I've learned
-                    firsthand that subtle differences in mechanics &mdash; overstriding, heavy heel
-                    striking, poor trunk lean &mdash; are major contributors to injury risk. Most
+                    firsthand that subtle differences in mechanics, like overstriding, heavy heel
+                    striking, or poor trunk lean, are major contributors to injury risk. Most
                     runners have no easy way to get objective feedback on their form. I wanted a tool
                     where anyone could point a camera at themselves and get an honest read on what
                     their body is actually doing.
@@ -102,7 +102,7 @@
                 <ul class="project-list">
                     <li><strong>Pose estimation.</strong> MediaPipe's pose landmarker pulls 33 body keypoints from each frame of side-view video.</li>
                     <li><strong>Feature engineering.</strong> Four form-relevant features are computed per frame: knee angle, trunk lean, foot offset, and cadence (steps per minute).</li>
-                    <li><strong>Confidence gating.</strong> Per-landmark visibility is checked before any metric is trusted &mdash; a green/red border tells you at a glance whether the current frame is usable.</li>
+                    <li><strong>Confidence gating.</strong> Per-landmark visibility is checked before any metric is trusted. A green/red border tells you at a glance whether the current frame is usable.</li>
                     <li><strong>Labeled data collection.</strong> Bulk CSV recording stamps a form label (<em>good</em>, <em>overstride</em>, or <em>excessive&nbsp;lean</em>) onto every row, optionally baking an overlay MP4 alongside it.</li>
                     <li><strong>Classification.</strong> A random-forest classifier trains on the labeled frames and reports per-class precision, recall, F1, a confusion matrix, and feature importances.</li>
                 </ul>
@@ -111,15 +111,15 @@
             <section class="project-section">
                 <h2>The interesting part: how I evaluated it</h2>
                 <p>
-                    The first model looked incredible &mdash; a stratified 80/20 split over all rows
+                    The first model looked incredible: a stratified 80/20 split over all rows
                     hit <strong>99.7% accuracy</strong>. That number is a trap. With only a handful of
                     recording sessions per label, a random row split leaks session identity into the
                     test set, so the model quietly learns <em>"which video is this"</em> rather than
                     <em>"what form is this."</em>
                 </p>
                 <p>
-                    Re-running with <strong>leave-one-session-out cross-validation</strong> &mdash;
-                    holding out an entire session at a time &mdash; told the real story: accuracy fell
+                    Re-running with <strong>leave-one-session-out cross-validation</strong>
+                    (holding out an entire session at a time) told the real story: accuracy fell
                     to ~44%. <em>excessive&nbsp;lean</em> stayed cleanly separable because trunk
                     posture is a stable, robust signal, but <em>good</em> and <em>overstride</em> were
                     nearly indistinguishable.
@@ -138,8 +138,8 @@
                             <tr>
                                 <td>Naive 80/20 row split</td>
                                 <td class="num">99.7%</td>
-                                <td class="num">&mdash;</td>
-                                <td class="num">&mdash;</td>
+                                <td class="num">n/a</td>
+                                <td class="num">n/a</td>
                             </tr>
                             <tr>
                                 <td>Leave-one-session-out (v1 data)</td>
@@ -160,7 +160,7 @@
                     I diagnosed the failure: the <code>foot_offset</code> feature was averaged across
                     the whole gait cycle, but the foot swings forward <em>and</em> backward every
                     stride, so its per-session mean sits near zero regardless of overstriding. The
-                    real overstride signal lives at the instant of foot contact &mdash; and averaging
+                    real overstride signal lives at the instant of foot contact, and averaging
                     erased it.
                 </p>
             </section>
@@ -171,7 +171,7 @@
                     The single biggest improvement came not from a fancier model or cleverer
                     features, but from <strong>better data collection</strong>. Re-recording with
                     more deliberate form and cleaner camera setups lifted overstride F1 from
-                    <strong>0.11 to 0.43</strong> &mdash; a ~4&times; gain with no change to the
+                    <strong>0.11 to 0.43</strong>, a ~4&times; gain with no change to the
                     algorithm at all.
                 </p>
             </div>
@@ -188,10 +188,10 @@
             <section class="project-section">
                 <h2>What I took away</h2>
                 <ul class="project-list">
-                    <li><strong>Session-level cross-validation is non-negotiable</strong> with few sessions &mdash; a row-level split overstated true accuracy by 50+ points.</li>
+                    <li><strong>Session-level cross-validation is non-negotiable</strong> with few sessions: a row-level split overstated true accuracy by 50+ points.</li>
                     <li><strong>Aggregating across a signal cycle can destroy</strong> the very phase-specific information that separates the classes you care about.</li>
-                    <li><strong>Data quality beats feature engineering</strong> at this scale &mdash; the cleanest dataset outperformed every model and feature change layered on top of it.</li>
-                    <li><strong>"Combine everything" isn't free</strong> &mdash; correlated features increased a small-data random forest's variance without adding information. The bias&ndash;variance tradeoff, observed in the wild.</li>
+                    <li><strong>Data quality beats feature engineering</strong> at this scale: the cleanest dataset outperformed every model and feature change layered on top of it.</li>
+                    <li><strong>"Combine everything" isn't free.</strong> Correlated features increased a small-data random forest's variance without adding information. The bias-variance tradeoff, observed in the wild.</li>
                 </ul>
             </section>
 

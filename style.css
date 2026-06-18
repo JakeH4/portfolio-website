@@ -745,6 +745,46 @@ header
     font-style: italic;
 }
 
+/* ===== PERSONAL / OUTSIDE OF CODE ===== */
+
+.personal-content
+{
+    max-width: 720px;
+}
+
+.personal-content p
+{
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.85;
+    margin-bottom: 1.2rem;
+}
+
+.personal-content p:last-child
+{
+    margin-bottom: 0;
+}
+
+.personal-content .highlight
+{
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.personal-content a
+{
+    color: var(--ash-grey);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-subtle);
+    transition: var(--transition);
+}
+
+.personal-content a:hover
+{
+    color: var(--beige);
+    border-bottom-color: var(--accent-soft);
+}
+
 /* ===== FOOTER (slim) ===== */
 
 footer

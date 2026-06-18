@@ -6,27 +6,27 @@
         <meta name="theme-color" content="#01161E">
         <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 
-        <title>Mancala AI Agent — Jake Huebner</title>
-        <meta name="description" content="Mancala-playing AI in Python — minimax with alpha-beta pruning, custom heuristic, and a 99% win rate at depth 5.">
+        <title>Mancala AI Agent | Jake Huebner</title>
+        <meta name="description" content="Mancala-playing AI in Python: minimax with alpha-beta pruning, a custom heuristic, and a 99% win rate at depth 5.">
 
         <meta property="og:type" content="article">
         <meta property="og:url" content="https://jakeahuebner.com/projects/mancala.html">
-        <meta property="og:title" content="Mancala AI Agent — Jake Huebner">
-        <meta property="og:description" content="Mancala-playing AI in Python — minimax with alpha-beta pruning, custom heuristic, and a 99% win rate at depth 5.">
+        <meta property="og:title" content="Mancala AI Agent | Jake Huebner">
+        <meta property="og:description" content="Mancala-playing AI in Python: minimax with alpha-beta pruning, a custom heuristic, and a 99% win rate at depth 5.">
         <meta property="og:image" content="https://jakeahuebner.com/assets/og-mancala.png">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="627">
 
         <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="Mancala AI Agent — Jake Huebner">
-        <meta name="twitter:description" content="Mancala-playing AI in Python — minimax with alpha-beta pruning, custom heuristic, and a 99% win rate at depth 5.">
+        <meta name="twitter:title" content="Mancala AI Agent | Jake Huebner">
+        <meta name="twitter:description" content="Mancala-playing AI in Python: minimax with alpha-beta pruning, a custom heuristic, and a 99% win rate at depth 5.">
         <meta name="twitter:image" content="https://jakeahuebner.com/assets/og-mancala.png">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&display=swap" rel="stylesheet">
 
-        <link rel="stylesheet" href="../style.css?v=3">
+        <link rel="stylesheet" href="../style.css?v=4">
     </head>
 
     <body>
@@ -37,8 +37,8 @@
             <h1 class="project-page-title">Mancala AI Agent</h1>
 
             <p class="project-lead">
-                A Mancala-playing AI built from scratch in Python &mdash; game engine, random
-                baseline, and search agents &mdash; benchmarked head-to-head over 100-game
+                A Mancala-playing AI built from scratch in Python (game engine, random
+                baseline, and search agents), benchmarked head-to-head over 100-game
                 tournaments. Minimax with alpha-beta pruning plus a custom heuristic lifts win
                 rate to 99% at depth 5.
             </p>
@@ -74,8 +74,8 @@
                     The project is structured as four layers, each independently testable:
                 </p>
                 <ul class="project-list">
-                    <li><strong>Game engine.</strong> A Mancala board with move legality, stone capture, end-of-game detection, and turn alternation &mdash; built from scratch so every search agent talks to the same rules.</li>
-                    <li><strong>Random baseline.</strong> Picks any legal move uniformly &mdash; the floor every smarter agent has to beat by a wide margin to count.</li>
+                    <li><strong>Game engine.</strong> A Mancala board with move legality, stone capture, end-of-game detection, and turn alternation, built from scratch so every search agent talks to the same rules.</li>
+                    <li><strong>Random baseline.</strong> Picks any legal move uniformly: the floor every smarter agent has to beat by a wide margin to count.</li>
                     <li><strong>Minimax + alpha-beta search.</strong> Identical move choices to plain minimax with a fraction of the node visits, making deeper plies practical.</li>
                     <li><strong>Custom heuristic evaluation.</strong> A linear combination of side-store difference and end-of-game stone-sweep credit, tuned through tournament play.</li>
                 </ul>
@@ -85,13 +85,13 @@
                 <h2>The interesting part: pruning vs. heuristic</h2>
                 <p>
                     Plain minimax at depth 10 was projected to take roughly <strong>two hours per
-                    game</strong> &mdash; clearly not playable. Alpha-beta pruning kept the same
+                    game</strong>, clearly not playable. Alpha-beta pruning kept the same
                     move choices but cut node visits by enough to make depth-10 search feasible
                     in seconds, a <strong>~3.9&times; speedup</strong>.
                 </p>
                 <p>
                     Even with deeper search, win rate against the baseline plateaued around 96%.
-                    The last gains didn't come from more depth &mdash; they came from teaching the
+                    The last gains didn't come from more depth. They came from teaching the
                     heuristic to value end-of-game stone sweeps, which are decisive late in a
                     game but invisible to a naive score-difference function. That single change
                     pushed win rate to <strong>99% at depth 5</strong>.
@@ -103,14 +103,14 @@
                 <p>
                     Past a certain depth, marginal wins come from heuristic design, not raw search.
                     Crediting end-of-game sweeps was a tiny code change that delivered the
-                    final 3% &mdash; bigger than any extra ply of search had.
+                    final 3%, bigger than any extra ply of search had.
                 </p>
             </div>
 
             <section class="project-section">
                 <h2>What I took away</h2>
                 <ul class="project-list">
-                    <li><strong>Alpha-beta isn't just a speedup</strong> &mdash; it's what makes deeper, otherwise-impractical search affordable in the first place.</li>
+                    <li><strong>Alpha-beta isn't just a speedup.</strong> It's what makes deeper, otherwise-impractical search affordable in the first place.</li>
                     <li><strong>Heuristic design eventually dominates search depth.</strong> A small domain-aware tweak beat several plies of additional lookahead.</li>
                     <li><strong>Tournament play is the honest benchmark.</strong> Single games hide variance; 100-game tournaments make small heuristic edges visible.</li>
                 </ul>
