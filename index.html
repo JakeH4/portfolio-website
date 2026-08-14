@@ -44,35 +44,7 @@
                 color: #EFF6E0;
             }
 
-            /* Column, not row: the wip-banner needs to sit ABOVE the nav+globe+content row and push
-               it down, not sit beside it as a third flex item. .page-row below carries the row
-               layout that used to live directly on body. */
             body
-            {
-                display: flex;
-                flex-direction: column;
-            }
-
-            .wip-banner
-            {
-                width: 100%;
-                padding: 10px 20px;
-                font-size: 13px;
-                text-align: center;
-                color: #01161E;
-                background: #AEC3B0;
-            }
-
-            /* Two versions of the same message, not one that reflows: the full sentence takes 3
-               lines at mobile widths, which is a lot of a phone screen for a banner, and (more
-               importantly) its height stops being predictable, which is exactly what the resume
-               button's mobile offset below needs to be. A short single-line version sidesteps both. */
-            .wip-banner-short
-            {
-                display: none;
-            }
-
-            .page-row
             {
                 display: flex;
                 align-items: flex-start;
@@ -99,6 +71,7 @@
                 width: 108px;
                 flex-shrink: 0;
                 height: 100vh;
+                height: 100dvh; /* mobile Safari's collapsing address bar makes plain vh unreliable — dvh tracks the real visible area; vh above is just the fallback for browsers that don't know dvh */
                 position: sticky;
                 top: 0;
                 padding: 20px 0;
@@ -135,14 +108,13 @@
             }
 
             /* ---- Persistent resume download — always available regardless of scroll position or
-               mode, instead of being buried inside a section (the Resume continent itself is a
-               placeholder for now; this is the real download). Solid/light fill on purpose: everything
+               mode, instead of being buried inside a section. Solid/light fill on purpose: everything
                else on the page is a dark badge, and this is the one primary call-to-action that should
                visually stand apart from the rest. ---- */
             .resume-download-btn
             {
                 position: fixed;
-                top: 44px; /* clears the wip-banner (measured 35.5px tall) + a small gap */
+                top: 20px;
                 right: 20px;
                 z-index: 30;
                 display: flex;
@@ -184,6 +156,7 @@
             {
                 width: 58%;
                 height: 100vh;
+                height: 100dvh; /* see .site-nav-col above for why both units are here */
                 position: sticky;
                 top: 0;
                 overflow: hidden;
@@ -224,6 +197,7 @@
             .scroll-section
             {
                 min-height: 100vh;
+                min-height: 100dvh; /* see .site-nav-col above for why both units are here */
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -497,22 +471,9 @@
                change for this to work correctly. ---- */
             @media screen and (max-width: 880px)
             {
-                /* body is unconditionally a column now (see the base rule) so the wip-banner always
-                   sits above everything else — the nav+globe+content row that used to live directly
-                   on body now lives on .page-row instead, so THIS is what needs to stack on mobile. */
-                .page-row
+                body
                 {
                     flex-direction: column;
-                }
-
-                .wip-banner-full
-                {
-                    display: none;
-                }
-
-                .wip-banner-short
-                {
-                    display: inline;
                 }
 
                 .site-nav-col
@@ -526,6 +487,7 @@
                     border-right: none;
                     border-bottom: 1px solid rgba(89, 131, 146, 0.3);
                     background: rgba(1, 22, 30, 0.92);
+                    -webkit-backdrop-filter: blur(6px); /* Safari needs the prefix even on versions that support the unprefixed property elsewhere */
                     backdrop-filter: blur(6px);
                 }
 
@@ -562,6 +524,7 @@
                 {
                     width: 100%;
                     height: 46vh;
+                    height: 46dvh;
                     position: sticky;
                     top: 48px;
                     border-right: none;
@@ -577,10 +540,7 @@
                    without this, the button (fixed at top:20px on desktop) would sit on top of it. */
                 .resume-download-btn
                 {
-                    /* Clears wip-banner (35.5px, short text at this width) + the 48px nav bar below
-                       it, both measured directly rather than assumed — this offset broke once before
-                       from stacking a guessed number on top of another guessed number. */
-                    top: 90px;
+                    top: 58px; /* clears the 48px nav bar + a small gap */
                     right: 10px;
                     padding: 7px 14px;
                     font-size: 12px;
@@ -594,6 +554,7 @@
                        roomy one-screen-ish feel per section (so the scroll pacing still matches the
                        camera animation) without that gutter. */
                     min-height: 70vh;
+                    min-height: 70dvh;
                     padding: 2.5rem 1.5rem;
                 }
 
@@ -634,6 +595,7 @@
                 .globe-pane
                 {
                     height: 40vh;
+                    height: 40dvh;
                 }
 
                 .site-nav a
@@ -657,12 +619,6 @@
     </head>
 
     <body>
-        <div class="wip-banner">
-            <span class="wip-banner-full">Work in progress: I'm actively rebuilding this site. Some sections (like Resume) are placeholders for now. Feedback welcome!</span>
-            <span class="wip-banner-short">Work in progress, feedback welcome!</span>
-        </div>
-
-        <div class="page-row">
         <div class="site-nav-col">
             <nav class="site-nav" id="site-nav">
                 <ul>
@@ -877,7 +833,6 @@
                     <p class="credits-line">&copy; 2026 Jake Huebner</p>
                 </section>
             </div>
-        </div>
         </div>
 
         <script type="module">
@@ -2005,6 +1960,12 @@
             controls.enablePan = false;
             controls.enabled = false; // starts scroll-driven; unlocked once you scroll past the last section
 
+            // OrbitControls sets touch-action:none on its domElement in its own constructor, unconditionally,
+            // to reliably own touch gestures whenever it IS enabled — but that means it's still "none" right
+            // now even though controls.enabled is false, which would silently eat a touch-scroll that starts
+            // over the globe before free-roam ever unlocks. Put it back to normal until setFreeRoam says otherwise.
+            renderer.domElement.style.touchAction = "auto";
+
             // ---- Clickable continents: raycast the click against the globe, land the hit point back
             // on a continent via the same UV + point-in-polygon test the boat's voyage window uses, and
             // jump to that section. Works in both scroll mode and free-roam (in free-roam, landing on a
@@ -2266,6 +2227,12 @@
                 }
                 freeRoamActive = active;
                 controls.enabled = active;
+                // Touch devices need this spelled out in CSS, not just handled in JS — without it,
+                // the browser's own scroll/zoom gesture recognizer can grab a touch-drag on the canvas
+                // before OrbitControls sees it. "none" while free-roaming hands the canvas fully to
+                // OrbitControls; "auto" the rest of the time so a swipe that starts on the globe still
+                // scrolls the page like normal, matching controls.enabled being off then too.
+                renderer.domElement.style.touchAction = active ? "none" : "auto";
                 globeHint.classList.toggle("is-visible", active);
                 if (!active)
                 {
