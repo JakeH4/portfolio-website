@@ -216,44 +216,6 @@
                 opacity: 1;
             }
 
-            /* Shown only after clicking a continent WHILE in free-roam — that click scrolls you back
-               into scroll-driven mode, which otherwise has no quick way back to free-roam short of
-               scrolling all the way down again. Hides itself again once free-roam re-engages. */
-            .back-to-explore-btn
-            {
-                position: absolute;
-                top: 20px;
-                left: 20px;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                padding: 8px 14px;
-                font-family: 'Inter', system-ui, sans-serif;
-                font-size: 13px;
-                color: #EFF6E0;
-                background: rgba(1, 22, 30, 0.7);
-                border: 1px solid rgba(89, 131, 146, 0.45);
-                border-radius: 999px;
-                cursor: pointer;
-                opacity: 0;
-                transform: translateY(-6px);
-                pointer-events: none;
-                transition: opacity 0.3s ease, transform 0.3s ease;
-            }
-
-            .back-to-explore-btn.is-visible
-            {
-                opacity: 1;
-                transform: translateY(0);
-                pointer-events: auto;
-            }
-
-            .back-to-explore-btn:hover
-            {
-                border-color: #598392;
-                color: #ffffff;
-            }
-
             .content-pane
             {
                 width: 42%;
@@ -720,7 +682,6 @@
             <div class="globe-pane">
                 <div id="canvas-host"></div>
                 <div class="globe-pane-hint" id="globe-hint">Free-roam unlocked &mdash; drag to look around</div>
-                <button class="back-to-explore-btn" id="back-to-explore">&larr; Back to Explore</button>
             </div>
 
             <div class="content-pane">
@@ -2215,11 +2176,16 @@
                     triggerClickFlash(continentId);
                     if (freeRoamActive)
                     {
-                        // Leaving free-roam via this click — surface a quick way back, since
-                        // otherwise the only route back to it is scrolling all the way down again.
-                        backToExploreBtn.classList.add("is-visible");
+                        // Stay in free-roam — swap which section's text is showing and pan the
+                        // camera to it, rather than scrolling the whole page back up to a section
+                        // (which also re-triggered the scroll-driven camera transition on top of the
+                        // page scroll itself — that stacking was the source of the janky animation).
+                        openFreeRoamPanel(continentId);
                     }
-                    goToSection(continentId);
+                    else
+                    {
+                        goToSection(continentId);
+                    }
                 }
             });
             renderer.domElement.addEventListener("pointermove", (event) =>
@@ -2227,6 +2193,18 @@
                 const continentId = continentAtEvent(event);
                 renderer.domElement.style.cursor = continentId ? "pointer" : "default";
                 setHoveredContinent(continentId);
+
+                // A real drag in progress (not just the click that may have opened it) dismisses
+                // an open free-roam panel, handing the camera back to the user's own dragging —
+                // this is what "drag off of it to keep exploring" means in practice.
+                if (pointerDownAt && freeRoamPanelContinentId !== null)
+                {
+                    const dragMoved = Math.hypot(event.clientX - pointerDownAt.x, event.clientY - pointerDownAt.y);
+                    if (dragMoved > 5)
+                    {
+                        closeFreeRoamPanel();
+                    }
+                }
             });
 
             // ---- Scroll-driven camera poses, one per section, in document order ----
@@ -2279,7 +2257,6 @@
 
             // ---- Free-roam handoff ----
             let freeRoamActive = false;
-            const backToExploreBtn = document.getElementById("back-to-explore");
 
             function setFreeRoam(active)
             {
@@ -2290,15 +2267,62 @@
                 freeRoamActive = active;
                 controls.enabled = active;
                 globeHint.classList.toggle("is-visible", active);
-                if (active)
+                if (!active)
                 {
-                    // Free-roam re-engaging (however that happened — this button, scrolling back
-                    // down manually, whatever) means there's nowhere left to "return" to.
-                    backToExploreBtn.classList.remove("is-visible");
+                    // Leaving free-roam entirely (e.g. the nav scrolled the page away) — don't carry
+                    // a stale open panel or in-flight pan into the next time free-roam re-engages.
+                    freeRoamPanelContinentId = null;
+                    freeRoamPanTarget = null;
                 }
             }
 
-            backToExploreBtn.addEventListener("click", () => goToSection("explore"));
+            // ---- Free-roam "peek" panels: clicking a continent while exploring shows that
+            // continent's text panel directly (swapping which section has .is-active) and pans the
+            // camera to face it, instead of scrolling the whole page back up to that section — see
+            // the pointerup handler above for why the old approach felt janky. Dragging afterward
+            // (handled in the pointermove handler above) dismisses the panel and hands the camera
+            // back, returning to the default Explore text — free-roam stays free-roam the whole time. ----
+            let freeRoamPanelContinentId = null;
+            let freeRoamPanTarget = null;
+
+            function setActiveSection(id)
+            {
+                for (const el of sectionEls)
+                {
+                    el.classList.toggle("is-active", el.dataset.section === id);
+                }
+                for (const [linkId, link] of navLinkById)
+                {
+                    if (link)
+                    {
+                        link.classList.toggle("is-active", linkId === id);
+                    }
+                }
+            }
+
+            function openFreeRoamPanel(continentId)
+            {
+                freeRoamPanelContinentId = continentId;
+                setActiveSection(continentId);
+                freeRoamPanTarget = continentDirection(continentId).normalize().multiplyScalar(camera.position.length());
+                // OrbitControls keeps its own cached orbit state and will fight a scripted camera
+                // move if left enabled, snapping back to wherever it thinks the camera should be —
+                // disabling it for the (short, ~1s) pan avoids that fight entirely. Re-enabled the
+                // moment the pan finishes, or immediately if a drag interrupts it (see pointermove).
+                controls.enabled = false;
+            }
+
+            function closeFreeRoamPanel()
+            {
+                if (freeRoamPanelContinentId === null)
+                {
+                    return;
+                }
+                freeRoamPanelContinentId = null;
+                freeRoamPanTarget = null;
+                setActiveSection("explore");
+                controls.enabled = true;
+            }
 
             // ---- Active-section fade via IntersectionObserver (decoupled from the camera math on purpose —
             // a little slack between "text highlighted" and "camera arrived" reads as natural, not mechanical).
@@ -2380,7 +2404,23 @@
 
                 if (freeRoamActive)
                 {
-                    controls.update();
+                    if (freeRoamPanTarget)
+                    {
+                        // Scripted pan toward a clicked continent — see openFreeRoamPanel for why
+                        // controls.update() is skipped (not just left running alongside this) while
+                        // this is happening.
+                        camera.position.lerp(freeRoamPanTarget, 0.08);
+                        camera.lookAt(0, 0, 0);
+                        if (camera.position.distanceTo(freeRoamPanTarget) < 0.01)
+                        {
+                            freeRoamPanTarget = null;
+                            controls.enabled = true;
+                        }
+                    }
+                    else
+                    {
+                        controls.update();
+                    }
                     hideAllVehicles();
                 }
                 else
