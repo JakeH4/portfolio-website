@@ -523,17 +523,29 @@
                 .globe-pane
                 {
                     width: 100%;
-                    height: 46vh;
-                    height: 46dvh;
+                    height: 30vh;
+                    height: 30dvh;
                     position: sticky;
                     top: 48px;
                     border-right: none;
                     border-bottom: 1px solid rgba(89, 131, 146, 0.3);
+                    transition: height 0.4s ease;
+                }
+
+                /* Explore hands you the globe to drag around, so it gets more of the screen once
+                   you're there — see setFreeRoam for where .is-free-roam gets toggled on body. */
+                body.is-free-roam .globe-pane
+                {
+                    height: 55vh;
+                    height: 55dvh;
                 }
 
                 .content-pane
                 {
                     width: 100%;
+                    /* Just needs to be positioned (not static) so it paints above the sticky globe
+                       pane above it — see the per-section background below for why that matters. */
+                    position: relative;
                 }
 
                 /* The nav becomes a full-width 48px bar up top on mobile (see .site-nav-col above) —
@@ -556,6 +568,19 @@
                     min-height: 70vh;
                     min-height: 70dvh;
                     padding: 2.5rem 1.5rem;
+                    /* Each section gets its own opaque backing so it cleanly covers the sticky globe
+                       pane as it scrolls past, instead of the globe bleeding through behind the text. */
+                    background: #01161E;
+                }
+
+                /* Once free-roam is on, only the active section (whichever continent was tapped, or
+                   Explore by default) stays on screen — the rest are hidden rather than scrolled past.
+                   With just one short section left, .content-pane collapses to roughly a screen's worth
+                   of height, so it settles in right below the now-larger globe with nothing left to
+                   scroll — a small fixed text panel under a big draggable globe, not a long document. */
+                body.is-free-roam .content-pane .scroll-section:not(.is-active)
+                {
+                    display: none;
                 }
 
                 .hero-photo-frame
@@ -594,8 +619,14 @@
 
                 .globe-pane
                 {
-                    height: 40vh;
-                    height: 40dvh;
+                    height: 26vh;
+                    height: 26dvh;
+                }
+
+                body.is-free-roam .globe-pane
+                {
+                    height: 50vh;
+                    height: 50dvh;
                 }
 
                 .site-nav a
@@ -2234,6 +2265,10 @@
                 // scrolls the page like normal, matching controls.enabled being off then too.
                 renderer.domElement.style.touchAction = active ? "none" : "auto";
                 globeHint.classList.toggle("is-visible", active);
+                // Drives the mobile-only "bigger globe, single text panel underneath" layout — see the
+                // body.is-free-roam rules near .globe-pane and .scroll-section. No-op on desktop, where
+                // those rules don't exist and the side-by-side layout doesn't need this at all.
+                document.body.classList.toggle("is-free-roam", active);
                 if (!active)
                 {
                     // Leaving free-roam entirely (e.g. the nav scrolled the page away) — don't carry
@@ -2294,6 +2329,8 @@
             // ---- Active-section fade via IntersectionObserver (decoupled from the camera math on purpose —
             // a little slack between "text highlighted" and "camera arrived" reads as natural, not mechanical).
             // The same signal drives the nav's active highlight, so both stay in sync automatically. ----
+            const MOBILE_QUERY = window.matchMedia("(max-width: 880px)");
+
             const sectionObserver = new IntersectionObserver((entries) =>
             {
                 for (const entry of entries)
@@ -2303,6 +2340,16 @@
                     if (navLink)
                     {
                         navLink.classList.toggle("is-active", entry.isIntersecting);
+                    }
+                    // On mobile, hand off to free-roam off this same signal instead of the scrollProgress
+                    // threshold below (kept for desktop) — scrollProgress is measured against section
+                    // centers captured once at load, and mobile Safari's collapsing address bar shifts
+                    // the real scrollable height as you go, so that threshold could end up never quite
+                    // reached even once you're genuinely looking at Explore. This observer doesn't have
+                    // that problem, since it just watches what's actually on screen right now.
+                    if (entry.target.dataset.section === "explore" && MOBILE_QUERY.matches)
+                    {
+                        setFreeRoam(entry.isIntersecting);
                     }
                 }
             }, { threshold: 0.5 });
@@ -2345,7 +2392,18 @@
                 {
                     scrollTicking = false;
                     updateScrollProgress();
-                    setFreeRoam(scrollProgress >= SECTION_IDS.length - 1 - 0.02);
+                    // Desktop only — mobile hands off to free-roam from the IntersectionObserver signal
+                    // instead (see sectionObserver below). This threshold is measured against section
+                    // centers captured once at load, and mobile Safari's collapsing address bar shifts
+                    // the real scrollable height as you scroll, so on mobile this could misfire (true
+                    // when nowhere near Explore, or never true at all) — worse, a false positive here
+                    // collapses .content-pane down to one section, which yanks scrollY backward as the
+                    // browser clamps it to the now-much-shorter document. Not just redundant on mobile,
+                    // actively harmful, so it's fully gated off there rather than just superseded.
+                    if (!MOBILE_QUERY.matches)
+                    {
+                        setFreeRoam(scrollProgress >= SECTION_IDS.length - 1 - 0.02);
+                    }
                 });
             }
             window.addEventListener("scroll", onScroll, { passive: true });
