@@ -213,6 +213,44 @@
                 transform: translateY(0);
             }
 
+            /* ---- Desktop free-roam panel: .is-active alone (above) only changes opacity — fine while
+               scroll is driving the camera, since the active section is always the one you've scrolled
+               to. But clicking a DIFFERENT continent's marker while free-roaming (openFreeRoamPanel)
+               doesn't scroll the page — that's the whole point, no jarring scroll-back — so that
+               continent's section could be thousands of pixels off-screen in either direction and just
+               quietly going opaque somewhere nobody can see it. Solved by pulling the active section out
+               of the document with a fixed overlay pinned to where the content pane visually sits, so it
+               shows up in place no matter where in the document it actually lives. The rest go
+               visibility:hidden rather than display:none — hidden keeps its normal-flow box (and the
+               scroll height that comes with it) so entering/leaving free-roam never changes how tall the
+               page is, which is what caused scrollY to jump on mobile (see the mobile rules) before that
+               got fixed a different way there. Desktop-only: mobile already collapses to one section on
+               purpose, since it only ever lands on Explore first, not an arbitrary continent. ---- */
+            @media screen and (min-width: 881px)
+            {
+                body.is-free-roam .scroll-section
+                {
+                    visibility: hidden;
+                }
+
+                body.is-free-roam .scroll-section.is-active
+                {
+                    visibility: visible;
+                    position: fixed;
+                    /* Percentages on a fixed element resolve against the viewport, not .layout's
+                       flex-computed box — so this is spelled out by hand to land in the same 58/42
+                       split .globe-pane and .content-pane already use, instead of assuming a % here
+                       would line up with theirs (it wouldn't — it'd ignore the 108px nav entirely). */
+                    left: calc(108px + (100% - 108px) * 0.58);
+                    right: 0;
+                    top: 0;
+                    height: 100dvh;
+                    overflow-y: auto;
+                    z-index: 25;
+                    background: #01161E;
+                }
+            }
+
             .scroll-section-eyebrow
             {
                 font-size: 13px;
@@ -2249,6 +2287,7 @@
 
             // ---- Free-roam handoff ----
             let freeRoamActive = false;
+            let suppressDesktopFreeRoamExitCheck = false;
 
             function setFreeRoam(active)
             {
@@ -2265,10 +2304,28 @@
                 // scrolls the page like normal, matching controls.enabled being off then too.
                 renderer.domElement.style.touchAction = active ? "none" : "auto";
                 globeHint.classList.toggle("is-visible", active);
-                // Drives the mobile-only "bigger globe, single text panel underneath" layout — see the
-                // body.is-free-roam rules near .globe-pane and .scroll-section. No-op on desktop, where
-                // those rules don't exist and the side-by-side layout doesn't need this at all.
+                // Drives the mobile-only "bigger globe, single text panel underneath" layout, and the
+                // desktop free-roam panel rules near .scroll-section.is-active. Both rely on this class.
                 document.body.classList.toggle("is-free-roam", active);
+                if (active && !MOBILE_QUERY.matches)
+                {
+                    // Desktop's free-roam panel (see .scroll-section.is-active below) pulls the active
+                    // section out of the document's normal flow, which shortens the page by that
+                    // section's height right as you're scrolled almost all the way to its bottom — the
+                    // exact position where the browser would otherwise clamp scrollY back up and produce
+                    // a visible backward hop. Jumping to 0 here instead makes that clamp happen on our
+                    // terms, at the same instant the fixed panel takes over the screen, so it's masked
+                    // rather than seen — the panel looks identical regardless of the real scroll
+                    // position underneath it, since position:fixed doesn't care where scrollY sits.
+                    // scrollTo fires its own scroll event asynchronously, which would otherwise reach
+                    // onScroll below and immediately read "back at Hero" from the new scrollY of 0,
+                    // calling setFreeRoam(false) right back before this is even visible — suppressing
+                    // that one check covers exactly this synthetic scroll without blocking a real one,
+                    // like a nav-link click's scrollIntoView, which is how you actually leave free-roam.
+                    suppressDesktopFreeRoamExitCheck = true;
+                    window.scrollTo(0, 0);
+                    setTimeout(() => { suppressDesktopFreeRoamExitCheck = false; }, 100);
+                }
                 if (!active)
                 {
                     // Leaving free-roam entirely (e.g. the nav scrolled the page away) — don't carry
@@ -2335,11 +2392,23 @@
             {
                 for (const entry of entries)
                 {
-                    entry.target.classList.toggle("is-active", entry.isIntersecting);
-                    const navLink = navLinkById.get(entry.target.dataset.section);
-                    if (navLink)
+                    // While free-roaming, which section is "active" is owned entirely by
+                    // setActiveSection — driven by whichever continent was tapped, defaulting to
+                    // Explore — not by what's scrolled into view, since the desktop free-roam panel
+                    // deliberately doesn't move with scroll position anymore (see .scroll-section.is-active
+                    // below). Letting this observer keep toggling .is-active here too would fight that:
+                    // scrollY jumping to 0 when free-roam engages (see setFreeRoam) would make Hero
+                    // "intersect" again, and this callback would mark it active right alongside whatever
+                    // continent is genuinely showing, which is exactly the two-sections-active bug that
+                    // caused the panel to collapse the page unpredictably before this guard was added.
+                    if (!freeRoamActive)
                     {
-                        navLink.classList.toggle("is-active", entry.isIntersecting);
+                        entry.target.classList.toggle("is-active", entry.isIntersecting);
+                        const navLink = navLinkById.get(entry.target.dataset.section);
+                        if (navLink)
+                        {
+                            navLink.classList.toggle("is-active", entry.isIntersecting);
+                        }
                     }
                     // On mobile, hand off to free-roam off this same signal instead of the scrollProgress
                     // threshold below (kept for desktop) — scrollProgress is measured against section
@@ -2400,7 +2469,7 @@
                     // collapses .content-pane down to one section, which yanks scrollY backward as the
                     // browser clamps it to the now-much-shorter document. Not just redundant on mobile,
                     // actively harmful, so it's fully gated off there rather than just superseded.
-                    if (!MOBILE_QUERY.matches)
+                    if (!MOBILE_QUERY.matches && !suppressDesktopFreeRoamExitCheck)
                     {
                         setFreeRoam(scrollProgress >= SECTION_IDS.length - 1 - 0.02);
                     }
