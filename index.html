@@ -940,9 +940,10 @@
                         around freely. <a href="mailto:jakehuebner4@gmail.com">jakehuebner4@gmail.com</a>
                     </p>
                     <p class="credits-line">
-                        Airplane, Boat, and Satellite models by Poly by Google, via
-                        <a href="https://poly.pizza" target="_blank" rel="noopener">Poly Pizza</a>
-                        (<a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>).
+                        3D models via <a href="https://poly.pizza" target="_blank" rel="noopener">Poly Pizza</a>,
+                        under their respective Creative Commons licenses: Airplane, Boat, Satellite,
+                        Factory, Road, Computer, Mountain, and Piano by Poly by Google; Bookshelf by
+                        Zsky; Pine Trees and Sports Car by Quaternius.
                     </p>
                     <p class="credits-line">&copy; 2026 Jake Huebner</p>
                 </section>
@@ -1647,7 +1648,20 @@
                 // positions being on the opposite side from its "BackWheels" node), so no correction
                 // is needed for it to face the same "forward" the road above is rotated onto — that's
                 // what makes it read as driving along the road instead of facing some random way.
-                { id: "sports-car", continentId: "projects", url: "assets/models/sports-car.glb", targetSize: 0.1, offsetU: 0.046, offsetV: 0.035, rotationOffsetY: 0 }
+                { id: "sports-car", continentId: "projects", url: "assets/models/sports-car.glb", targetSize: 0.1, offsetU: 0.046, offsetV: 0.035, rotationOffsetY: 0 },
+
+                // Skills — a bookshelf and a computer setup, standing in for "things I've learned" and
+                // "what I build with." Neither needs to face anything else nearby, so rotationOffsetY
+                // is left at 0 pending a visual check rather than derived from vertex data.
+                { id: "bookshelf", continentId: "skills", url: "assets/models/bookshelf.glb", targetSize: 0.13, offsetU: -0.03, offsetV: -0.02, rotationOffsetY: 0 },
+                { id: "computer", continentId: "skills", url: "assets/models/computer.glb", targetSize: 0.1, offsetU: 0.03, offsetV: 0.025, rotationOffsetY: 0 },
+
+                // Personal — a mountain (distance running, and the same backdrop as the hero photo),
+                // a small pine cluster scattered next to it so it reads as a landscape rather than one
+                // lone object, and a piano (four years in University Choir).
+                { id: "mountain", continentId: "personal", url: "assets/models/mountain.glb", targetSize: 0.24, offsetU: -0.025, offsetV: -0.02, rotationOffsetY: 0 },
+                { id: "pine-trees", continentId: "personal", url: "assets/models/pine-trees.glb", targetSize: 0.17, offsetU: -0.06, offsetV: -0.045, rotationOffsetY: 0 },
+                { id: "piano", continentId: "personal", url: "assets/models/piano.glb", targetSize: 0.12, offsetU: 0.035, offsetV: 0.03, rotationOffsetY: 0 }
             ];
 
             const LANDMARK_GROUND_ALTITUDE = 2.01;
@@ -1766,6 +1780,51 @@
                 }
             }
 
+            // ---- Computer monitor glow: a steady (not animated-position) additive sprite standing in
+            // for screen light. Same reason this isn't just a child of the model that setGroupOpacity
+            // could fade automatically — that function stamps one flat opacity onto every child with a
+            // material, which would either blow this out to full strength or force it to match the
+            // model's own opacity curve exactly. Tracked independently instead so its own peak intensity
+            // is a separate number. Unlike the smoke, the landmark itself never moves once placed, so the
+            // world-space position only needs computing once here, not every frame. Screen position is
+            // estimated from the loaded model's overall bounding box (upper-middle area) rather than
+            // exact vertex analysis — a soft ambient glow doesn't need the precision the smoke's exact
+            // chimney-rim origin did. ----
+            let computerGlow = null;
+
+            function setupComputerGlow(pivot, model)
+            {
+                const box = new THREE.Box3().setFromObject(model);
+                const material = new THREE.SpriteMaterial({
+                    map: buildGlowTexture(),
+                    color: 0xbfe3ff,
+                    transparent: true,
+                    opacity: 0,
+                    blending: THREE.AdditiveBlending,
+                    depthWrite: false
+                });
+                const sprite = new THREE.Sprite(material);
+                sprite.position.set(
+                    (box.min.x + box.max.x) / 2,
+                    box.min.y + (box.max.y - box.min.y) * 0.72,
+                    (box.min.z + box.max.z) / 2
+                );
+                sprite.scale.setScalar(0.028);
+                scene.add(sprite);
+                computerGlow = { pivot, sprite };
+            }
+
+            function updateComputerGlow()
+            {
+                if (!computerGlow)
+                {
+                    return;
+                }
+                const parentOpacity = computerGlow.pivot.userData.opacity;
+                computerGlow.sprite.material.opacity = 0.45 * parentOpacity;
+                computerGlow.sprite.visible = parentOpacity > 0.02;
+            }
+
             const landmarksByContinent = {};
             for (const source of LANDMARK_SOURCES)
             {
@@ -1801,6 +1860,10 @@
                         if (source.id === "factory")
                         {
                             setupFactorySmoke(pivot, model);
+                        }
+                        if (source.id === "computer")
+                        {
+                            setupComputerGlow(pivot, model);
                         }
                     },
                     undefined,
@@ -2576,6 +2639,7 @@
                 updateClickFlash();
                 updateHoverGlow();
                 updateFactorySmoke();
+                updateComputerGlow();
                 renderer.render(scene, camera);
             }
             animate();
