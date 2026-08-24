@@ -30,24 +30,50 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&display=swap" rel="stylesheet">
 
+        <!-- Shared palette, reset, and base typography — same file every other page on the site
+             (running-form/omniflow/mancala/404) links, so the color tokens only live in one place.
+             Everything below this point is this page's own: the globe/sidebar layout and a few
+             hero-section pieces that happen to share names with style.css's own hero classes but
+             aren't the same component (see the hero-section-* renames below), so they're redeclared
+             here rather than reused. -->
+        <link rel="stylesheet" href="style.css?v=4">
+
         <style>
-            *
+            /* One extra token alongside style.css's palette: a lightened air-force-blue used only on
+               this page, for small text where the original read at 4.48:1 against the page background
+               — just under WCAG AA's 4.5:1 floor. Same hue, enough lighter to clear it with margin
+               (5.51:1). Local rather than added to style.css's shared :root since the other pages don't
+               use air-force-blue at a size/weight where this was an issue. */
+            :root
             {
-                box-sizing: border-box;
+                --air-force-blue-a11y: #6793A2;
             }
 
-            html, body
-            {
-                margin: 0;
-                background: #01161E;
-                font-family: 'Inter', system-ui, sans-serif;
-                color: #EFF6E0;
-            }
-
+            /* style.css already resets box-sizing/margin and sets body's font-family/background/color
+               (--font-body, --bg-primary, --text-primary resolve to the exact values these used to
+               hardcode) — only what actually differs from that shared base is redeclared here. */
             body
             {
                 display: flex;
                 align-items: flex-start;
+            }
+
+            /* style.css's <html> sets scroll-behavior:smooth for its anchor-link pages. This page
+               drives its own scroll-linked camera animation and also calls window.scrollTo(0, 0)
+               programmatically (see setFreeRoam) — the free-roam-exit suppression timing assumes that
+               completes instantly. A smooth-animated scroll taking longer than its 100ms window would
+               reintroduce the old exit-check misfire this was already fixed for once. */
+            html
+            {
+                scroll-behavior: auto;
+            }
+
+            /* style.css's decorative body::before wash is meant to show through a plain page
+               background — this page's real background is the WebGL globe, so it's turned off here
+               instead of inherited (it would otherwise show through behind the text panel). */
+            body::before
+            {
+                content: none;
             }
 
             /* Keyboard-only focus ring, in the theme's own accent color instead of the browser
@@ -56,7 +82,7 @@
             a:focus-visible,
             button:focus-visible
             {
-                outline: 2px solid #AEC3B0;
+                outline: 2px solid var(--ash-grey);
                 outline-offset: 3px;
                 border-radius: 2px;
             }
@@ -101,7 +127,7 @@
                 display: block;
                 padding: 6px 14px;
                 font-size: 12px;
-                color: #7a9298;
+                color: var(--text-muted);
                 text-decoration: none;
                 border-left: 2px solid transparent;
                 transition: color 0.2s ease, border-color 0.2s ease;
@@ -109,13 +135,13 @@
 
             .site-nav a:hover
             {
-                color: #AEC3B0;
+                color: var(--ash-grey);
             }
 
             .site-nav a.is-active
             {
-                color: #EFF6E0;
-                border-left-color: #598392;
+                color: var(--beige);
+                border-left-color: var(--air-force-blue);
             }
 
             /* ---- Persistent resume download — always available regardless of scroll position or
@@ -132,11 +158,11 @@
                 align-items: center;
                 gap: 8px;
                 padding: 10px 18px;
-                font-family: 'Inter', system-ui, sans-serif;
+                font-family: var(--font-body);
                 font-size: 13px;
                 font-weight: 600;
-                color: #01161E;
-                background: #EFF6E0;
+                color: var(--ink-black);
+                background: var(--beige);
                 border-radius: 999px;
                 text-decoration: none;
                 transition: background 0.2s ease, transform 0.2s ease;
@@ -188,7 +214,7 @@
                 left: 20px;
                 right: 20px;
                 font-size: 12px;
-                color: #7a9298;
+                color: var(--text-muted);
                 text-align: center;
                 opacity: 0;
                 transition: opacity 0.5s ease;
@@ -258,7 +284,7 @@
                     height: 100dvh;
                     overflow-y: auto;
                     z-index: 25;
-                    background: #01161E;
+                    background: var(--ink-black);
                 }
             }
 
@@ -267,52 +293,62 @@
                 font-size: 13px;
                 letter-spacing: 0.08em;
                 text-transform: uppercase;
-                /* Lightened from the original #598392 — that read at 4.48:1 against the page
-                   background, just under WCAG AA's 4.5:1 floor for text this size. Same hue,
-                   just enough lighter to clear it with real margin (5.51:1). */
-                color: #6793A2;
+                color: var(--air-force-blue-a11y);
                 margin: 0 0 10px;
             }
 
             .scroll-section-title
             {
-                font-family: 'Newsreader', Georgia, serif;
+                font-family: var(--font-heading);
                 font-size: 40px;
                 margin: 0 0 20px;
             }
 
             /* Same circular-frame treatment as the real site's headshot (style.css .hero-photo-frame),
-               just sized down for this column, which is narrower than the real hero's two-column grid. */
-            .hero-photo-frame
+               just sized down for this column, which is narrower than the real hero's two-column grid.
+               Named hero-section-* (not hero-*) because style.css already defines .hero-photo-frame,
+               .hero-contact(-email/-phone/-sep), and .hero-socials for its own, differently-laid-out
+               hero — same names, different component. Linking style.css (above) would otherwise let
+               its rules leak into these through the cascade: a stray border/padding on the contact
+               row, a dimmed separator, fixed-size circular social icons — all real, all wrong here. */
+            .hero-section-photo-frame
             {
                 width: 96px;
+                /* aspect-ratio alone isn't enough here: the child img has height:100%, and a
+                   percentage height doesn't reliably resolve against a height that only comes
+                   from aspect-ratio — the img was falling back to its own intrinsic ratio instead
+                   (400x533, i.e. taller than wide), which then grew this box right along with it,
+                   rendering an oval instead of a circle. An explicit height makes the box's size
+                   unambiguous regardless of that resolution question; aspect-ratio just stays on
+                   as a harmless backstop. */
+                height: 96px;
                 aspect-ratio: 1 / 1;
                 border-radius: 50%;
                 padding: 3px;
-                background: #AEC3B0;
+                background: var(--ash-grey);
                 box-shadow: 0 12px 30px rgba(1, 22, 30, 0.55);
                 margin-bottom: 24px;
             }
 
-            .hero-photo-img
+            .hero-section-photo-img
             {
                 width: 100%;
                 height: 100%;
                 border-radius: 50%;
                 display: block;
                 object-fit: cover;
-                background: #124559;
+                background: var(--dark-teal);
             }
 
             /* Hero gets its own bigger, grander treatment — this is the "welcome" moment, everything
                after it is a regular content section. */
             .hero-title
             {
-                font-family: 'Newsreader', Georgia, serif;
+                font-family: var(--font-heading);
                 font-size: 88px;
                 line-height: 1.02;
                 margin: 0 0 28px;
-                color: #EFF6E0;
+                color: var(--beige);
             }
 
             .hero-lead
@@ -325,10 +361,10 @@
 
             .hero-lead strong
             {
-                color: #EFF6E0;
+                color: var(--beige);
             }
 
-            .hero-contact
+            .hero-section-contact
             {
                 display: flex;
                 align-items: center;
@@ -338,27 +374,27 @@
                 font-size: 14px;
             }
 
-            .hero-contact-email,
-            .hero-contact-phone
+            .hero-section-contact-email,
+            .hero-section-contact-phone
             {
-                color: #AEC3B0;
+                color: var(--ash-grey);
                 text-decoration: none;
                 border-bottom: 1px solid transparent;
                 transition: border-color 0.2s ease;
             }
 
-            .hero-contact-email:hover,
-            .hero-contact-phone:hover
+            .hero-section-contact-email:hover,
+            .hero-section-contact-phone:hover
             {
-                border-color: #AEC3B0;
+                border-color: var(--ash-grey);
             }
 
-            .hero-contact-sep
+            .hero-section-contact-sep
             {
-                color: #6793A2; /* see .scroll-section-eyebrow for why this shade, not the original */
+                color: var(--air-force-blue-a11y);
             }
 
-            .hero-socials
+            .hero-section-socials
             {
                 display: flex;
                 align-items: center;
@@ -366,16 +402,16 @@
                 margin-left: 4px;
             }
 
-            .hero-socials a
+            .hero-section-socials a
             {
                 display: flex;
-                color: #7a9298;
+                color: var(--text-muted);
                 transition: color 0.2s ease;
             }
 
-            .hero-socials a:hover
+            .hero-section-socials a:hover
             {
-                color: #EFF6E0;
+                color: var(--beige);
             }
 
             .hero-scroll-cue
@@ -383,7 +419,7 @@
                 margin-top: 48px;
                 font-size: 13px;
                 letter-spacing: 0.05em;
-                color: #6793A2; /* see .scroll-section-eyebrow for why this shade, not the original */
+                color: var(--air-force-blue-a11y);
                 animation: hero-cue-bob 2s ease-in-out infinite;
             }
 
@@ -429,7 +465,7 @@
 
             .scroll-section-body a
             {
-                color: #AEC3B0;
+                color: var(--ash-grey);
             }
 
             .scroll-section-tags
@@ -446,7 +482,7 @@
                 border-radius: 999px;
                 padding: 4px 12px;
                 font-size: 12px;
-                color: #AEC3B0;
+                color: var(--ash-grey);
             }
 
             /* Reusable "distinct items within a section" pattern — a name (optionally linked), a
@@ -465,16 +501,16 @@
 
             .topic-item-title
             {
-                font-family: 'Newsreader', Georgia, serif;
+                font-family: var(--font-heading);
                 font-size: 19px;
                 font-weight: 600;
-                color: #EFF6E0;
+                color: var(--beige);
                 margin: 0 0 6px;
             }
 
             .topic-item-title a
             {
-                color: #EFF6E0;
+                color: var(--beige);
                 text-decoration: none;
                 border-bottom: 1px solid rgba(174, 195, 176, 0.4);
                 transition: border-color 0.2s ease;
@@ -482,13 +518,13 @@
 
             .topic-item-title a:hover
             {
-                border-color: #AEC3B0;
+                border-color: var(--ash-grey);
             }
 
             .topic-item-arrow
             {
                 font-size: 14px;
-                color: #7a9298;
+                color: var(--text-muted);
             }
 
             .topic-item-body
@@ -514,13 +550,13 @@
                 border-radius: 999px;
                 padding: 3px 10px;
                 font-size: 11px;
-                color: #AEC3B0;
+                color: var(--ash-grey);
             }
 
             .scroll-section-footnote
             {
                 font-size: 13px;
-                color: #7a9298;
+                color: var(--text-muted);
                 margin-top: 26px;
             }
 
@@ -530,13 +566,13 @@
             {
                 margin-top: 28px;
                 font-size: 12px;
-                color: #7a9298;
+                color: var(--text-muted);
                 max-width: 54ch;
             }
 
             .credits-line a
             {
-                color: #7a9298;
+                color: var(--text-muted);
             }
 
             /* ---- Mobile/narrow layout: the side-by-side "globe pinned left, text scrolls right"
@@ -589,7 +625,7 @@
                 .site-nav a.is-active
                 {
                     border-left-color: transparent;
-                    border-bottom-color: #598392;
+                    border-bottom-color: var(--air-force-blue);
                 }
 
                 .layout
@@ -648,7 +684,7 @@
                     padding: 2.5rem 1.5rem;
                     /* Each section gets its own opaque backing so it cleanly covers the sticky globe
                        pane as it scrolls past, instead of the globe bleeding through behind the text. */
-                    background: #01161E;
+                    background: var(--ink-black);
                 }
 
                 /* Once free-roam is on, only the active section (whichever continent was tapped, or
@@ -661,9 +697,10 @@
                     display: none;
                 }
 
-                .hero-photo-frame
+                .hero-section-photo-frame
                 {
                     width: 72px;
+                    height: 72px;
                     margin-bottom: 18px;
                 }
 
@@ -756,8 +793,8 @@
 
             <div class="content-pane">
                 <section class="scroll-section hero-section" data-section="hero">
-                    <div class="hero-photo-frame">
-                        <img src="assets/headshot.jpg" alt="Jake Huebner" class="hero-photo-img">
+                    <div class="hero-section-photo-frame">
+                        <img src="assets/headshot.jpg" alt="Jake Huebner" class="hero-section-photo-img">
                     </div>
                     <p class="scroll-section-eyebrow">Welcome to</p>
                     <h1 class="hero-title">My World</h1>
@@ -766,11 +803,11 @@
                         Colorado with a minor in business. Every part of this site lives somewhere
                         on the globe beside you. Scroll to explore it.
                     </p>
-                    <div class="hero-contact">
-                        <a href="mailto:jakehuebner4@gmail.com" class="hero-contact-email">jakehuebner4@gmail.com</a>
-                        <span class="hero-contact-sep">&middot;</span>
-                        <a href="tel:+12149572344" class="hero-contact-phone">(214) 957-2344</a>
-                        <div class="hero-socials">
+                    <div class="hero-section-contact">
+                        <a href="mailto:jakehuebner4@gmail.com" class="hero-section-contact-email">jakehuebner4@gmail.com</a>
+                        <span class="hero-section-contact-sep">&middot;</span>
+                        <a href="tel:+12149572344" class="hero-section-contact-phone">(214) 957-2344</a>
+                        <div class="hero-section-socials">
                             <a href="https://github.com/JakeH4" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                                 <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
                                     <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-3.795-.735-.54-1.38-1.32-1.74-1.32-1.74-1.08-.735.084-.72.084-.72 1.2.084 1.83 1.23 1.83 1.23 1.065 1.815 2.79 1.29 3.465.99.105-.765.42-1.29.765-1.59-2.655-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.545 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.92 1.23 3.225 0 4.605-2.805 5.625-5.475 5.92.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
@@ -942,8 +979,8 @@
                     <p class="credits-line">
                         3D models via <a href="https://poly.pizza" target="_blank" rel="noopener">Poly Pizza</a>,
                         under their respective Creative Commons licenses: Airplane, Boat, Satellite,
-                        Factory, Road, Computer, Mountain, and Piano by Poly by Google; Bookshelf by
-                        Zsky; Pine Trees and Sports Car by Quaternius.
+                        Factory, Road, Computer, Mountain, Piano, Graduation Cap, and Briefcase by Poly
+                        by Google; Bookshelf by Zsky; Pine Trees and Sports Car by Quaternius.
                     </p>
                     <p class="credits-line">&copy; 2026 Jake Huebner</p>
                 </section>
@@ -1661,7 +1698,13 @@
                 // lone object, and a piano (four years in University Choir).
                 { id: "mountain", continentId: "personal", url: "assets/models/mountain.glb", targetSize: 0.24, offsetU: -0.025, offsetV: -0.02, rotationOffsetY: 0 },
                 { id: "pine-trees", continentId: "personal", url: "assets/models/pine-trees.glb", targetSize: 0.17, offsetU: -0.06, offsetV: -0.045, rotationOffsetY: 0 },
-                { id: "piano", continentId: "personal", url: "assets/models/piano.glb", targetSize: 0.12, offsetU: 0.035, offsetV: 0.03, rotationOffsetY: 0 }
+                { id: "piano", continentId: "personal", url: "assets/models/piano.glb", targetSize: 0.12, offsetU: 0.035, offsetV: 0.03, rotationOffsetY: 0 },
+
+                // Resume — a graduation cap (education) and a briefcase (career), the last continent
+                // without any landmarks. Same as the other pairs, neither needs to face anything in
+                // particular, so rotationOffsetY stays at 0 pending a visual check.
+                { id: "graduation-cap", continentId: "resume", url: "assets/models/graduation-cap.glb", targetSize: 0.08, offsetU: -0.03, offsetV: -0.025, rotationOffsetY: 0 },
+                { id: "briefcase", continentId: "resume", url: "assets/models/briefcase.glb", targetSize: 0.11, offsetU: 0.035, offsetV: 0.03, rotationOffsetY: 0 }
             ];
 
             const LANDMARK_GROUND_ALTITUDE = 2.01;
