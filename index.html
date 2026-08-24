@@ -58,16 +58,6 @@
                 align-items: flex-start;
             }
 
-            /* style.css's <html> sets scroll-behavior:smooth for its anchor-link pages. This page
-               drives its own scroll-linked camera animation and also calls window.scrollTo(0, 0)
-               programmatically (see setFreeRoam) — the free-roam-exit suppression timing assumes that
-               completes instantly. A smooth-animated scroll taking longer than its 100ms window would
-               reintroduce the old exit-check misfire this was already fixed for once. */
-            html
-            {
-                scroll-behavior: auto;
-            }
-
             /* style.css's decorative body::before wash is meant to show through a plain page
                background — this page's real background is the WebGL globe, so it's turned off here
                instead of inherited (it would otherwise show through behind the text panel). */
@@ -859,10 +849,10 @@
                 letter-spacing: -0.01em;
             }
 
-            /* ---- Timeline: a vertical line of dated milestones per project. The dates are
-               placeholders (the dashed date pill is the visual cue) — I don't have Jake's real
-               project history, so these are structured guesses at what the milestones probably
-               were, written to be edited with the real dates rather than shipped as-is. ---- */
+            /* ---- Timeline: a vertical line of dated milestones per project. Dates are approximate
+               (Jake gave the real date ranges — Running Form Analyzer was all of March 2026,
+               OmniFlow mid-March to early May, Mancala the full Spring semester — specific days
+               within each are an evenly-paced estimate, not exact recollection). ---- */
             .project-detail-timeline-heading
             {
                 margin-top: 3rem;
@@ -921,7 +911,7 @@
                 text-transform: uppercase;
                 color: var(--ash-grey);
                 background: rgba(174, 195, 176, 0.1);
-                border: 1px dashed rgba(174, 195, 176, 0.45);
+                border: 1px solid rgba(174, 195, 176, 0.35);
                 border-radius: 4px;
                 padding: 2px 8px;
                 margin-bottom: 6px;
@@ -1197,9 +1187,8 @@
              display:block. Screenshot/chart <img>s use data-src, not src — set for real only when
              their article first opens, so the ~450KB of Running Form Analyzer images never load
              for a visit that never opens it (see the load-time pass this page already went
-             through). Timeline dates are placeholders — I don't have Jake's real project history,
-             so these are structured guesses at what the milestones probably were; find/replace the
-             "[... — edit me]" markers with the real dates. ---- -->
+             through). Timeline dates are approximate, evenly paced within the real ranges Jake gave
+             for each project rather than exact recollection. ---- -->
         <div class="project-detail" id="project-detail" role="dialog" aria-modal="true" aria-label="Project details">
             <button type="button" class="project-detail-close" id="project-detail-close" aria-label="Close project details">
                 <span aria-hidden="true">&times;</span>
@@ -1382,27 +1371,27 @@
                     <h3 class="project-detail-timeline-heading">Timeline</h3>
                     <ol class="timeline">
                         <li class="timeline-item">
-                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-date">March 1, 2026</span>
                             <span class="timeline-label">Started</span>
                             <p>Set out to build an objective running-form feedback tool after years of overuse injuries from training.</p>
                         </li>
                         <li class="timeline-item">
-                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-date">March 8, 2026</span>
                             <span class="timeline-label">First working pipeline</span>
                             <p>MediaPipe pose tracking, the four engineered features, and confidence gating all working end to end; began recording and labeling sessions.</p>
                         </li>
                         <li class="timeline-item">
-                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-date">March 15, 2026</span>
                             <span class="timeline-label">Caught the evaluation trap</span>
                             <p>A naive 80/20 split showed a misleading 99.7% accuracy; switching to leave-one-session-out cross-validation revealed the real number, ~44%.</p>
                         </li>
                         <li class="timeline-item">
-                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-date">March 22, 2026</span>
                             <span class="timeline-label">Data-quality breakthrough</span>
                             <p>Re-recorded with more deliberate form and cleaner setups; overstride F1 jumped ~4&times; with no change to the model itself.</p>
                         </li>
                         <li class="timeline-item">
-                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-date">March 29, 2026</span>
                             <span class="timeline-label">Current state</span>
                             <p>Pipeline complete and evaluated end to end; next up is a streaming foot-strike detector and a small neural-net comparison.</p>
                         </li>
@@ -1551,27 +1540,27 @@
                     <h3 class="project-detail-timeline-heading">Timeline</h3>
                     <ol class="timeline">
                         <li class="timeline-item">
-                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-date">March 15, 2026</span>
                             <span class="timeline-label">Started</span>
                             <p>Kicked off as the CSCI 4448 final project with Evan Mohan; started from a broader traffic-network idea.</p>
                         </li>
                         <li class="timeline-item">
-                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-date">March 26, 2026</span>
                             <span class="timeline-label">Scoped down, core engine built</span>
                             <p>Narrowed to a single downtown intersection and built the shared polymorphic <code>Agent</code> interface, the engine, and the Factory/Strategy/Template Method/MVC pattern scaffolding.</p>
                         </li>
                         <li class="timeline-item">
-                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-date">April 9, 2026</span>
                             <span class="timeline-label">Behaviors layered on</span>
                             <p>Emergency preemption, bus-stop dwell, phased pedestrian crossings, and lane-aware bikes all working together in the same scene.</p>
                         </li>
                         <li class="timeline-item">
-                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-date">April 23, 2026</span>
                             <span class="timeline-label">Tested and polished</span>
                             <p>Five JUnit 5 suites covering the factory, engine, layout behavior, persistence, and camera math; UI controls (speed, filtering, save/load) finished.</p>
                         </li>
                         <li class="timeline-item">
-                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-date">May 2, 2026</span>
                             <span class="timeline-label">Completed &amp; presented</span>
                             <p>Final project submitted and defended for CSCI 4448.</p>
                         </li>
@@ -1670,27 +1659,27 @@
                     <h3 class="project-detail-timeline-heading">Timeline</h3>
                     <ol class="timeline">
                         <li class="timeline-item">
-                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-date">January 20, 2026</span>
                             <span class="timeline-label">Started</span>
                             <p>Began the CSCI 3202 AI course project: the Mancala board engine and a random-move baseline agent, built from scratch.</p>
                         </li>
                         <li class="timeline-item">
-                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-date">February 10, 2026</span>
                             <span class="timeline-label">Minimax, then alpha-beta</span>
                             <p>Plain minimax worked but was too slow to search deep; alpha-beta pruning cut node visits enough for a ~3.9&times; speedup at identical move choices.</p>
                         </li>
                         <li class="timeline-item">
-                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-date">March 3, 2026</span>
                             <span class="timeline-label">Hit a plateau</span>
                             <p>Deeper search alone stopped helping past a ~96% win rate against the baseline.</p>
                         </li>
                         <li class="timeline-item">
-                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-date">March 31, 2026</span>
                             <span class="timeline-label">Heuristic breakthrough</span>
                             <p>Added end-of-game stone-sweep credit to the heuristic; win rate jumped to 99% at depth 5.</p>
                         </li>
                         <li class="timeline-item">
-                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-date">April 28, 2026</span>
                             <span class="timeline-label">Current state</span>
                             <p>Benchmarked via 100-game tournaments per agent; write-up published here, GitHub repo link still coming.</p>
                         </li>
@@ -3150,7 +3139,6 @@
 
             // ---- Free-roam handoff ----
             let freeRoamActive = false;
-            let suppressDesktopFreeRoamExitCheck = false;
 
             function setFreeRoam(active)
             {
@@ -3170,25 +3158,11 @@
                 // Drives the mobile-only "bigger globe, single text panel underneath" layout, and the
                 // desktop free-roam panel rules near .scroll-section.is-active. Both rely on this class.
                 document.body.classList.toggle("is-free-roam", active);
-                if (active && !MOBILE_QUERY.matches)
-                {
-                    // Desktop's free-roam panel (see .scroll-section.is-active below) pulls the active
-                    // section out of the document's normal flow, which shortens the page by that
-                    // section's height right as you're scrolled almost all the way to its bottom — the
-                    // exact position where the browser would otherwise clamp scrollY back up and produce
-                    // a visible backward hop. Jumping to 0 here instead makes that clamp happen on our
-                    // terms, at the same instant the fixed panel takes over the screen, so it's masked
-                    // rather than seen — the panel looks identical regardless of the real scroll
-                    // position underneath it, since position:fixed doesn't care where scrollY sits.
-                    // scrollTo fires its own scroll event asynchronously, which would otherwise reach
-                    // onScroll below and immediately read "back at Hero" from the new scrollY of 0,
-                    // calling setFreeRoam(false) right back before this is even visible — suppressing
-                    // that one check covers exactly this synthetic scroll without blocking a real one,
-                    // like a nav-link click's scrollIntoView, which is how you actually leave free-roam.
-                    suppressDesktopFreeRoamExitCheck = true;
-                    window.scrollTo(0, 0);
-                    setTimeout(() => { suppressDesktopFreeRoamExitCheck = false; }, 100);
-                }
+                // Desktop's free-roam panel (see .scroll-section.is-active below) pulls the active
+                // section out of the document's normal flow — position:fixed doesn't care where
+                // scrollY sits, so no explicit scroll handling is needed here; the browser's own
+                // scroll clamping (if the shorter document even needs it) is the whole adjustment,
+                // not a jump back to the top of the page.
                 if (!active)
                 {
                     // Leaving free-roam entirely (e.g. the nav scrolled the page away) — don't carry
@@ -3332,7 +3306,7 @@
                     // collapses .content-pane down to one section, which yanks scrollY backward as the
                     // browser clamps it to the now-much-shorter document. Not just redundant on mobile,
                     // actively harmful, so it's fully gated off there rather than just superseded.
-                    if (!MOBILE_QUERY.matches && !suppressDesktopFreeRoamExitCheck)
+                    if (!MOBILE_QUERY.matches)
                     {
                         setFreeRoam(scrollProgress >= SECTION_IDS.length - 1 - 0.02);
                     }
