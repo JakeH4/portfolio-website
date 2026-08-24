@@ -750,6 +750,209 @@
                     font-size: 11px;
                 }
             }
+
+            /* ---- Project detail panel: clicking a project in the Projects section slides this in
+               from the right over the whole viewport, instead of navigating away to a separate page
+               — same "everything lives on this one page" idea the rest of the site already follows.
+               Reuses style.css's .project-page/.project-eyebrow/.stat-grid/.callout/.project-section
+               family directly for the ported write-up content (linked above; confirmed nothing in
+               this file's own rules already uses those names) instead of rebuilding parallel classes
+               — only the slide/overlay mechanics and the timeline below are new. ---- */
+            .project-detail
+            {
+                position: fixed;
+                inset: 0;
+                z-index: 60;
+                background: var(--ink-black);
+                visibility: hidden;
+                transform: translateX(100%);
+                transition: transform 0.45s cubic-bezier(0.25, 0.1, 0.25, 1), visibility 0s linear 0.45s;
+                overflow-y: auto;
+            }
+
+            .project-detail.is-open
+            {
+                visibility: visible;
+                transform: translateX(0);
+                transition: transform 0.45s cubic-bezier(0.25, 0.1, 0.25, 1);
+            }
+
+            /* The panel is its own scroll container (.project-detail has overflow-y:auto) — this
+               just stops the globe page underneath from *also* scrolling while it's covered. */
+            body.project-detail-open
+            {
+                overflow: hidden;
+            }
+
+            .project-detail-close
+            {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 61;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                border: 1px solid rgba(174, 195, 176, 0.3);
+                background: rgba(1, 22, 30, 0.75);
+                backdrop-filter: blur(6px);
+                -webkit-backdrop-filter: blur(6px);
+                color: var(--beige);
+                font-size: 22px;
+                line-height: 1;
+                cursor: pointer;
+                transition: background 0.2s ease, border-color 0.2s ease;
+            }
+
+            .project-detail-close:hover
+            {
+                background: rgba(1, 22, 30, 0.95);
+                border-color: var(--ash-grey);
+            }
+
+            .project-detail-article
+            {
+                display: none;
+            }
+
+            .project-detail-article.is-active
+            {
+                display: block;
+            }
+
+            /* Ported figures keep style.css's .project-figure sizing but don't need its own
+               fade-in — the whole panel already slides in as one piece. */
+            .project-detail-article .project-figure
+            {
+                margin-top: 2rem;
+            }
+
+            /* style.css's .project-section styling targets a bare h2 (right, for a standalone
+               page where the project title is the page's own h1). Embedded in this panel the
+               project title is itself an h2, so subsection headings go one level down to h3 —
+               same look, correct nesting, via this one extra selector. */
+            .project-detail-article .project-section h3
+            {
+                font-family: var(--font-heading);
+                font-size: clamp(1.4rem, 3vw, 1.7rem);
+                font-weight: 600;
+                letter-spacing: -0.01em;
+                color: var(--beige);
+                margin-bottom: 1.1rem;
+                padding-bottom: 0.6rem;
+                border-bottom: 1px solid rgba(89, 131, 146, 0.45);
+            }
+
+            /* Same reasoning one level deeper: style.css's .feature-card targets h3 (fine
+               standalone, right under that page's own h1/h2), but here it's nested inside a
+               .project-section's h3, so the card titles go to h4 instead. */
+            .project-detail-article .feature-card h4
+            {
+                font-family: var(--font-heading);
+                font-size: 1.08rem;
+                font-weight: 600;
+                color: var(--beige);
+                margin-bottom: 0.5rem;
+                letter-spacing: -0.01em;
+            }
+
+            /* ---- Timeline: a vertical line of dated milestones per project. The dates are
+               placeholders (the dashed date pill is the visual cue) — I don't have Jake's real
+               project history, so these are structured guesses at what the milestones probably
+               were, written to be edited with the real dates rather than shipped as-is. ---- */
+            .project-detail-timeline-heading
+            {
+                margin-top: 3rem;
+            }
+
+            .timeline
+            {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                position: relative;
+            }
+
+            .timeline::before
+            {
+                content: '';
+                position: absolute;
+                left: 5px;
+                top: 6px;
+                bottom: 6px;
+                width: 2px;
+                background: rgba(89, 131, 146, 0.35);
+            }
+
+            .timeline-item
+            {
+                position: relative;
+                padding-left: 28px;
+                margin-bottom: 1.75rem;
+            }
+
+            .timeline-item:last-child
+            {
+                margin-bottom: 0;
+            }
+
+            .timeline-item::before
+            {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 6px;
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background: var(--ink-black);
+                border: 2px solid var(--ash-grey);
+            }
+
+            .timeline-date
+            {
+                display: inline-block;
+                font-size: 0.78rem;
+                font-weight: 600;
+                letter-spacing: 0.04em;
+                text-transform: uppercase;
+                color: var(--ash-grey);
+                background: rgba(174, 195, 176, 0.1);
+                border: 1px dashed rgba(174, 195, 176, 0.45);
+                border-radius: 4px;
+                padding: 2px 8px;
+                margin-bottom: 6px;
+            }
+
+            .timeline-label
+            {
+                display: block;
+                font-family: var(--font-heading);
+                font-size: 1.05rem;
+                font-weight: 600;
+                color: var(--beige);
+                margin-bottom: 4px;
+            }
+
+            .timeline-item p
+            {
+                color: var(--text-secondary);
+                font-size: 0.92rem;
+                line-height: 1.6;
+                margin: 0;
+            }
+
+            @media screen and (max-width: 600px)
+            {
+                .project-detail-close
+                {
+                    top: 14px;
+                    right: 14px;
+                }
+            }
         </style>
 
         <!-- Import map so plain <script type="module"> can say `import ... from "three"` -->
@@ -862,7 +1065,7 @@
 
                     <div class="topic-item">
                         <h3 class="topic-item-title">
-                            <a href="projects/running-form.html">Running Form Analyzer <span class="topic-item-arrow" aria-hidden="true">&#8599;</span></a>
+                            <a href="projects/running-form.html" class="project-detail-trigger" data-project="running-form">Running Form Analyzer <span class="topic-item-arrow" aria-hidden="true">&#8594;</span></a>
                         </h3>
                         <p class="topic-item-body">
                             A pose-estimation tool that analyzes running form from video to flag
@@ -875,7 +1078,7 @@
 
                     <div class="topic-item">
                         <h3 class="topic-item-title">
-                            <a href="projects/omniflow.html">OmniFlow <span class="topic-item-arrow" aria-hidden="true">&#8599;</span></a>
+                            <a href="projects/omniflow.html" class="project-detail-trigger" data-project="omniflow">OmniFlow <span class="topic-item-arrow" aria-hidden="true">&#8594;</span></a>
                         </h3>
                         <p class="topic-item-body">
                             A real-time city traffic simulator.
@@ -886,10 +1089,12 @@
                     </div>
 
                     <div class="topic-item">
-                        <h3 class="topic-item-title">Mancala AI</h3>
+                        <h3 class="topic-item-title">
+                            <a href="projects/mancala.html" class="project-detail-trigger" data-project="mancala">Mancala AI <span class="topic-item-arrow" aria-hidden="true">&#8594;</span></a>
+                        </h3>
                         <p class="topic-item-body">
                             Minimax with alpha-beta pruning and a custom heuristic, with a 99% win
-                            rate at depth 5. Full write-up and GitHub link coming soon.
+                            rate at depth 5. GitHub link coming soon.
                         </p>
                         <div class="topic-item-tags">
                             <span>Python</span><span>NumPy</span><span>Matplotlib</span>
@@ -985,6 +1190,513 @@
                     <p class="credits-line">&copy; 2026 Jake Huebner</p>
                 </section>
             </div>
+        </div>
+
+        <!-- ---- Project detail panel: hidden off-screen to the right until a project link below
+             opens it (see openProjectDetail). One article per project, only the active one
+             display:block. Screenshot/chart <img>s use data-src, not src — set for real only when
+             their article first opens, so the ~450KB of Running Form Analyzer images never load
+             for a visit that never opens it (see the load-time pass this page already went
+             through). Timeline dates are placeholders — I don't have Jake's real project history,
+             so these are structured guesses at what the milestones probably were; find/replace the
+             "[... — edit me]" markers with the real dates. ---- -->
+        <div class="project-detail" id="project-detail" role="dialog" aria-modal="true" aria-label="Project details">
+            <button type="button" class="project-detail-close" id="project-detail-close" aria-label="Close project details">
+                <span aria-hidden="true">&times;</span>
+            </button>
+
+            <article class="project-detail-article" data-project="running-form">
+                <div class="project-page">
+                    <p class="project-eyebrow">Machine Learning &middot; CSCI 4622</p>
+                    <h2 class="project-page-title">Running Form Analyzer</h2>
+
+                    <p class="project-lead">
+                        A computer-vision pipeline that watches a runner from the side, tracks 33
+                        body keypoints in real time, and learns to flag form faults like
+                        overstriding and excessive trunk lean.
+                    </p>
+
+                    <div class="project-page-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">MediaPipe</span>
+                        <span class="tag">OpenCV</span>
+                        <span class="tag">scikit-learn</span>
+                        <span class="tag">NumPy</span>
+                    </div>
+
+                    <div class="project-links">
+                        <a href="https://github.com/JakeH4/MLProject-RunFormAnalyzer" target="_blank" rel="noopener noreferrer" class="btn btn-outline">View on GitHub &#8599;</a>
+                    </div>
+
+                    <figure class="project-figure">
+                        <img data-src="assets/running-form-demo.jpg" alt="The analyzer running live: pose landmarks overlaid on a runner, a real-time knee-angle readout, and a green border signalling the frame is trustworthy.">
+                        <figcaption>
+                            The analyzer running live: MediaPipe landmarks overlaid, a real-time
+                            knee-angle readout, hip/knee/ankle markers, and a green border that
+                            signals the frame is confident enough to trust.
+                        </figcaption>
+                    </figure>
+
+                    <div class="stat-grid">
+                        <div class="stat-card">
+                            <span class="stat-value">33</span>
+                            <span class="stat-label">body keypoints tracked per frame</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">4</span>
+                            <span class="stat-label">biomechanical features engineered</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">2,629</span>
+                            <span class="stat-label">labeled frames collected across 10 sessions</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">~4&times;</span>
+                            <span class="stat-label">overstride F1 gain from better data alone</span>
+                        </div>
+                    </div>
+
+                    <section class="project-section">
+                        <h3>Why I built it</h3>
+                        <p>
+                            I'm a marathon runner with a history of recurring injuries, and I've
+                            learned firsthand that subtle differences in mechanics, like
+                            overstriding, heavy heel striking, or poor trunk lean, are major
+                            contributors to injury risk. Most runners have no easy way to get
+                            objective feedback on their form. I wanted a tool where anyone could
+                            point a camera at themselves and get an honest read on what their body
+                            is actually doing.
+                        </p>
+                    </section>
+
+                    <section class="project-section">
+                        <h3>How it works</h3>
+                        <p>The system is a full pipeline from raw webcam video to a trained classifier:</p>
+                        <ul class="project-list">
+                            <li><strong>Pose estimation.</strong> MediaPipe's pose landmarker pulls 33 body keypoints from each frame of side-view video.</li>
+                            <li><strong>Feature engineering.</strong> Four form-relevant features are computed per frame: knee angle, trunk lean, foot offset, and cadence (steps per minute).</li>
+                            <li><strong>Confidence gating.</strong> Per-landmark visibility is checked before any metric is trusted. A green/red border tells you at a glance whether the current frame is usable.</li>
+                            <li><strong>Labeled data collection.</strong> Bulk CSV recording stamps a form label (<em>good</em>, <em>overstride</em>, or <em>excessive&nbsp;lean</em>) onto every row, optionally baking an overlay MP4 alongside it.</li>
+                            <li><strong>Classification.</strong> A random-forest classifier trains on the labeled frames and reports per-class precision, recall, F1, a confusion matrix, and feature importances.</li>
+                        </ul>
+                    </section>
+
+                    <section class="project-section">
+                        <h3>The interesting part: how I evaluated it</h3>
+                        <p>
+                            The first model looked incredible: a stratified 80/20 split over all
+                            rows hit <strong>99.7% accuracy</strong>. That number is a trap. With
+                            only a handful of recording sessions per label, a random row split
+                            leaks session identity into the test set, so the model quietly learns
+                            <em>"which video is this"</em> rather than <em>"what form is this."</em>
+                        </p>
+                        <p>
+                            Re-running with <strong>leave-one-session-out cross-validation</strong>
+                            (holding out an entire session at a time) told the real story: accuracy
+                            fell to ~44%. <em>excessive&nbsp;lean</em> stayed cleanly separable
+                            because trunk posture is a stable, robust signal, but <em>good</em> and
+                            <em>overstride</em> were nearly indistinguishable.
+                        </p>
+                        <div class="table-wrap">
+                            <table class="result-table">
+                                <thead>
+                                    <tr>
+                                        <th>Evaluation protocol</th>
+                                        <th class="num">Accuracy</th>
+                                        <th class="num">overstride&nbsp;F1</th>
+                                        <th class="num">excessive&nbsp;lean&nbsp;F1</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Naive 80/20 row split</td>
+                                        <td class="num">99.7%</td>
+                                        <td class="num">n/a</td>
+                                        <td class="num">n/a</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Leave-one-session-out (v1 data)</td>
+                                        <td class="num">43.5%</td>
+                                        <td class="num">0.11</td>
+                                        <td class="num">0.86</td>
+                                    </tr>
+                                    <tr class="highlight-row">
+                                        <td>Leave-one-session-out (v2 data)</td>
+                                        <td class="num">47.0%</td>
+                                        <td class="num">0.43</td>
+                                        <td class="num">0.50</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>
+                            I diagnosed the failure: the <code>foot_offset</code> feature was
+                            averaged across the whole gait cycle, but the foot swings forward
+                            <em>and</em> backward every stride, so its per-session mean sits near
+                            zero regardless of overstriding. The real overstride signal lives at
+                            the instant of foot contact, and averaging erased it.
+                        </p>
+                    </section>
+
+                    <div class="callout">
+                        <span class="callout-label">Key insight</span>
+                        <p>
+                            The single biggest improvement came not from a fancier model or
+                            cleverer features, but from <strong>better data collection</strong>.
+                            Re-recording with more deliberate form and cleaner camera setups lifted
+                            overstride F1 from <strong>0.11 to 0.43</strong>, a ~4&times; gain with
+                            no change to the algorithm at all.
+                        </p>
+                    </div>
+
+                    <figure class="project-figure">
+                        <img data-src="assets/running-form-f1.png" alt="Bar chart of per-class F1 under leave-one-session-out cross-validation across four experiments.">
+                        <figcaption>
+                            Per-class F1 under leave-one-session-out CV across four experiments.
+                            The jump from old data (green) to new data (orange) drove the largest
+                            gain in the weakest class, overstride.
+                        </figcaption>
+                    </figure>
+
+                    <section class="project-section">
+                        <h3>What I took away</h3>
+                        <ul class="project-list">
+                            <li><strong>Session-level cross-validation is non-negotiable</strong> with few sessions: a row-level split overstated true accuracy by 50+ points.</li>
+                            <li><strong>Aggregating across a signal cycle can destroy</strong> the very phase-specific information that separates the classes you care about.</li>
+                            <li><strong>Data quality beats feature engineering</strong> at this scale: the cleanest dataset outperformed every model and feature change layered on top of it.</li>
+                            <li><strong>"Combine everything" isn't free.</strong> Correlated features increased a small-data random forest's variance without adding information. The bias-variance tradeoff, observed in the wild.</li>
+                        </ul>
+                    </section>
+
+                    <section class="project-section">
+                        <h3>Where it's headed</h3>
+                        <p>
+                            Next steps are more sessions per class to stabilize the
+                            cross-validation variance, a proper streaming foot-strike detector for
+                            genuine real-time feedback, and a comparison against a small neural
+                            network. The end goal is unchanged: point a camera at any runner and
+                            hand them feedback worth acting on.
+                        </p>
+                    </section>
+
+                    <h3 class="project-detail-timeline-heading">Timeline</h3>
+                    <ol class="timeline">
+                        <li class="timeline-item">
+                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-label">Started</span>
+                            <p>Set out to build an objective running-form feedback tool after years of overuse injuries from training.</p>
+                        </li>
+                        <li class="timeline-item">
+                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-label">First working pipeline</span>
+                            <p>MediaPipe pose tracking, the four engineered features, and confidence gating all working end to end; began recording and labeling sessions.</p>
+                        </li>
+                        <li class="timeline-item">
+                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-label">Caught the evaluation trap</span>
+                            <p>A naive 80/20 split showed a misleading 99.7% accuracy; switching to leave-one-session-out cross-validation revealed the real number, ~44%.</p>
+                        </li>
+                        <li class="timeline-item">
+                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-label">Data-quality breakthrough</span>
+                            <p>Re-recorded with more deliberate form and cleaner setups; overstride F1 jumped ~4&times; with no change to the model itself.</p>
+                        </li>
+                        <li class="timeline-item">
+                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-label">Current state</span>
+                            <p>Pipeline complete and evaluated end to end; next up is a streaming foot-strike detector and a small neural-net comparison.</p>
+                        </li>
+                    </ol>
+                </div>
+            </article>
+
+            <article class="project-detail-article" data-project="omniflow">
+                <div class="project-page">
+                    <p class="project-eyebrow">Object-Oriented Design &middot; CSCI 4448</p>
+                    <h2 class="project-page-title">OmniFlow: City Traffic Simulator</h2>
+
+                    <p class="project-lead">
+                        A real-time 2D traffic simulator where cars, buses, emergency vehicles,
+                        bikes, and pedestrians all move through one shared, polymorphic agent
+                        model, built to show clean object-oriented design from the engine up.
+                    </p>
+
+                    <div class="project-page-tags">
+                        <span class="tag">Java 17</span>
+                        <span class="tag">JavaFX</span>
+                        <span class="tag">Gradle</span>
+                        <span class="tag">JUnit 5</span>
+                    </div>
+
+                    <div class="project-links">
+                        <a href="https://github.com/ProofLion/4448-project-OmniFlow" target="_blank" rel="noopener noreferrer" class="btn btn-outline">View on GitHub &#8599;</a>
+                    </div>
+
+                    <div class="stat-grid">
+                        <div class="stat-card">
+                            <span class="stat-value">5</span>
+                            <span class="stat-label">polymorphic agent types</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">4</span>
+                            <span class="stat-label">classic design patterns applied</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">5</span>
+                            <span class="stat-label">JUnit 5 test suites</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">2</span>
+                            <span class="stat-label">person team</span>
+                        </div>
+                    </div>
+
+                    <section class="project-section">
+                        <h3>Overview</h3>
+                        <p>
+                            OmniFlow simulates a busy downtown intersection in real time: vehicles
+                            obeying signals, buses dwelling at stops, pedestrians crossing in
+                            phases, and emergency vehicles cutting through it all. It was the
+                            final project for CU Boulder's Object-Oriented Analysis &amp; Design
+                            course, built with a teammate (<a href="https://github.com/ProofLion/4448-project-OmniFlow" target="_blank" rel="noopener noreferrer">Evan&nbsp;Mohan</a>).
+                        </p>
+                        <p>
+                            The point was never hyper-realistic traffic modeling. It was to
+                            demonstrate clean object orientation: polymorphism, dependency
+                            injection, design patterns, a responsive JavaFX UI, and basic
+                            persistence, all structured so the architecture is easy to reason
+                            about and explain. We deliberately narrowed an early, broader idea
+                            down to a single polished scene because it was easier to finish well
+                            and defend.
+                        </p>
+                    </section>
+
+                    <section class="project-section">
+                        <h3>One interface, five behaviors</h3>
+                        <p>
+                            Every moving thing on the map (car, bus, emergency vehicle, bike,
+                            pedestrian) is updated through a single shared <code>Agent</code>
+                            interface. The simulation engine stores and steps agents
+                            polymorphically, so each type varies its own behavior through small
+                            override hooks rather than sprawling <code>if/else</code> trees or
+                            <code>switch</code> statements. Adding a new agent type means writing a
+                            class, not editing the engine.
+                        </p>
+                    </section>
+
+                    <section class="project-section">
+                        <h3>Simulation behaviors</h3>
+                        <ul class="project-list">
+                            <li><strong>Emergency preemption.</strong> A spawned emergency vehicle triggers a temporary all-red and clears the lane ahead, then despawns once it has cleared the scene.</li>
+                            <li><strong>Bus-stop dwell.</strong> Buses pause at stops while trailing vehicles queue up behind them rather than clipping through.</li>
+                            <li><strong>Phased pedestrian crossings.</strong> Directional walk signals with separate crossing phases, flashing countdowns, and longer walk windows so pedestrians finish crossing safely.</li>
+                            <li><strong>Lane-aware bikes.</strong> Bikes stay on sidewalk routes and stop short of pedestrian crosswalks.</li>
+                            <li><strong>Clean exits.</strong> Pedestrians and bikes leave the map at its edges instead of looping or teleporting back through the scene.</li>
+                        </ul>
+                        <p>
+                            The UI exposes start / pause / single-step controls, a speed slider,
+                            agent-type filtering, click-to-select agent details, manual
+                            emergency-vehicle spawning, and save/load of the layout state.
+                        </p>
+                    </section>
+
+                    <section class="project-section">
+                        <h3>Design patterns</h3>
+                        <div class="feature-grid">
+                            <div class="feature-card">
+                                <h4>Factory</h4>
+                                <p>An <code>AgentFactory</code> builds agents from shared type names; the engine and persistence layer code against an <code>AgentProvider</code> abstraction, never concrete classes.</p>
+                            </div>
+                            <div class="feature-card">
+                                <h4>Strategy</h4>
+                                <p>A <code>MapLayout</code> interface lets layouts be swapped in; the downtown layout owns its own signal timing, queueing, crossing rules, and preemption logic.</p>
+                            </div>
+                            <div class="feature-card">
+                                <h4>Template Method</h4>
+                                <p>A <code>BaseAgent</code> owns the shared update algorithm, and subclasses customize just the parts they need through small override hooks.</p>
+                            </div>
+                            <div class="feature-card">
+                                <h4>Observer / MVC</h4>
+                                <p>A controller wires UI actions to the model; JavaFX listeners react to control and selection changes, and rendering reads model state instead of owning logic.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="callout">
+                        <span class="callout-label">Design philosophy</span>
+                        <p>
+                            The engine depends on <strong>abstractions, not implementations</strong>:
+                            <code>SimulationEngine</code> takes its world, agent provider, and
+                            random source through its constructor (dependency injection), and
+                            stores agents behind the <code>Agent</code> interface. The result is a
+                            simulation you can extend and test without reaching into its core.
+                        </p>
+                    </div>
+
+                    <section class="project-section">
+                        <h3>Testing</h3>
+                        <p>
+                            Coverage focuses where it matters most, the model and simulation logic
+                            rather than exhaustive UI testing, across five JUnit 5 suites:
+                        </p>
+                        <ul class="project-list">
+                            <li><strong>AgentFactoryTest</strong>: agents are created correctly from type names.</li>
+                            <li><strong>SimulationEngineTest</strong>: the engine steps the world and its injected dependencies as expected.</li>
+                            <li><strong>LayoutBehaviorTest</strong>: signal timing, queueing, and crossing rules behave correctly.</li>
+                            <li><strong>LayoutStoreTest</strong>: layout state survives a save/load round-trip.</li>
+                            <li><strong>Camera2DTest</strong>: the 2D camera transforms world and screen coordinates correctly.</li>
+                        </ul>
+                    </section>
+
+                    <h3 class="project-detail-timeline-heading">Timeline</h3>
+                    <ol class="timeline">
+                        <li class="timeline-item">
+                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-label">Started</span>
+                            <p>Kicked off as the CSCI 4448 final project with Evan Mohan; started from a broader traffic-network idea.</p>
+                        </li>
+                        <li class="timeline-item">
+                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-label">Scoped down, core engine built</span>
+                            <p>Narrowed to a single downtown intersection and built the shared polymorphic <code>Agent</code> interface, the engine, and the Factory/Strategy/Template Method/MVC pattern scaffolding.</p>
+                        </li>
+                        <li class="timeline-item">
+                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-label">Behaviors layered on</span>
+                            <p>Emergency preemption, bus-stop dwell, phased pedestrian crossings, and lane-aware bikes all working together in the same scene.</p>
+                        </li>
+                        <li class="timeline-item">
+                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-label">Tested and polished</span>
+                            <p>Five JUnit 5 suites covering the factory, engine, layout behavior, persistence, and camera math; UI controls (speed, filtering, save/load) finished.</p>
+                        </li>
+                        <li class="timeline-item">
+                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-label">Completed &amp; presented</span>
+                            <p>Final project submitted and defended for CSCI 4448.</p>
+                        </li>
+                    </ol>
+                </div>
+            </article>
+
+            <article class="project-detail-article" data-project="mancala">
+                <div class="project-page">
+                    <p class="project-eyebrow">Artificial Intelligence &middot; CSCI 3202</p>
+                    <h2 class="project-page-title">Mancala AI Agent</h2>
+
+                    <p class="project-lead">
+                        A Mancala-playing AI built from scratch in Python (game engine, random
+                        baseline, and search agents), benchmarked head-to-head over 100-game
+                        tournaments. Minimax with alpha-beta pruning plus a custom heuristic
+                        lifts win rate to 99% at depth 5.
+                    </p>
+
+                    <div class="project-page-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">NumPy</span>
+                        <span class="tag">Matplotlib</span>
+                    </div>
+
+                    <div class="project-links">
+                        <span class="btn btn-outline" aria-disabled="true" style="opacity: 0.55; cursor: default;">GitHub link coming soon</span>
+                    </div>
+
+                    <div class="stat-grid">
+                        <div class="stat-card">
+                            <span class="stat-value">99%</span>
+                            <span class="stat-label">win rate at depth 5 with the new heuristic</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">~3.9&times;</span>
+                            <span class="stat-label">speedup from alpha-beta pruning at identical win rates</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">10</span>
+                            <span class="stat-label">deepest search depth made feasible by pruning</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">100</span>
+                            <span class="stat-label">games per tournament for benchmarking each agent</span>
+                        </div>
+                    </div>
+
+                    <section class="project-section">
+                        <h3>How it's built</h3>
+                        <p>The project is structured as four layers, each independently testable:</p>
+                        <ul class="project-list">
+                            <li><strong>Game engine.</strong> A Mancala board with move legality, stone capture, end-of-game detection, and turn alternation, built from scratch so every search agent talks to the same rules.</li>
+                            <li><strong>Random baseline.</strong> Picks any legal move uniformly: the floor every smarter agent has to beat by a wide margin to count.</li>
+                            <li><strong>Minimax + alpha-beta search.</strong> Identical move choices to plain minimax with a fraction of the node visits, making deeper plies practical.</li>
+                            <li><strong>Custom heuristic evaluation.</strong> A linear combination of side-store difference and end-of-game stone-sweep credit, tuned through tournament play.</li>
+                        </ul>
+                    </section>
+
+                    <section class="project-section">
+                        <h3>The interesting part: pruning vs. heuristic</h3>
+                        <p>
+                            Plain minimax at depth 10 was projected to take roughly <strong>two
+                            hours per game</strong>, clearly not playable. Alpha-beta pruning kept
+                            the same move choices but cut node visits by enough to make depth-10
+                            search feasible in seconds, a <strong>~3.9&times; speedup</strong>.
+                        </p>
+                        <p>
+                            Even with deeper search, win rate against the baseline plateaued
+                            around 96%. The last gains didn't come from more depth. They came from
+                            teaching the heuristic to value end-of-game stone sweeps, which are
+                            decisive late in a game but invisible to a naive score-difference
+                            function. That single change pushed win rate to <strong>99% at depth
+                            5</strong>.
+                        </p>
+                    </section>
+
+                    <div class="callout">
+                        <span class="callout-label">Key insight</span>
+                        <p>
+                            Past a certain depth, marginal wins come from heuristic design, not
+                            raw search. Crediting end-of-game sweeps was a tiny code change that
+                            delivered the final 3%, bigger than any extra ply of search had.
+                        </p>
+                    </div>
+
+                    <section class="project-section">
+                        <h3>What I took away</h3>
+                        <ul class="project-list">
+                            <li><strong>Alpha-beta isn't just a speedup.</strong> It's what makes deeper, otherwise-impractical search affordable in the first place.</li>
+                            <li><strong>Heuristic design eventually dominates search depth.</strong> A small domain-aware tweak beat several plies of additional lookahead.</li>
+                            <li><strong>Tournament play is the honest benchmark.</strong> Single games hide variance; 100-game tournaments make small heuristic edges visible.</li>
+                        </ul>
+                    </section>
+
+                    <h3 class="project-detail-timeline-heading">Timeline</h3>
+                    <ol class="timeline">
+                        <li class="timeline-item">
+                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-label">Started</span>
+                            <p>Began the CSCI 3202 AI course project: the Mancala board engine and a random-move baseline agent, built from scratch.</p>
+                        </li>
+                        <li class="timeline-item">
+                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-label">Minimax, then alpha-beta</span>
+                            <p>Plain minimax worked but was too slow to search deep; alpha-beta pruning cut node visits enough for a ~3.9&times; speedup at identical move choices.</p>
+                        </li>
+                        <li class="timeline-item">
+                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-label">Hit a plateau</span>
+                            <p>Deeper search alone stopped helping past a ~96% win rate against the baseline.</p>
+                        </li>
+                        <li class="timeline-item">
+                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-label">Heuristic breakthrough</span>
+                            <p>Added end-of-game stone-sweep credit to the heuristic; win rate jumped to 99% at depth 5.</p>
+                        </li>
+                        <li class="timeline-item">
+                            <span class="timeline-date">[Month 2026 &mdash; edit me]</span>
+                            <span class="timeline-label">Current state</span>
+                            <p>Benchmarked via 100-game tournaments per agent; write-up published here, GitHub repo link still coming.</p>
+                        </li>
+                    </ol>
+                </div>
+            </article>
         </div>
 
         <script type="module">
@@ -2637,6 +3349,111 @@
                 updateScrollProgress();
             }
             window.addEventListener("resize", onResize);
+
+            // ---- Project detail panel: clicking a project in the Projects section slides this in
+            // from the right instead of navigating away (see the .project-detail CSS above). Only a
+            // plain left-click is intercepted — the href is left pointing at the real standalone
+            // page, so cmd/ctrl/shift/middle-click still open it in a new tab as a genuine fallback,
+            // not just a decorative attribute. ----
+            const projectDetailEl = document.getElementById("project-detail");
+            const projectDetailCloseBtn = document.getElementById("project-detail-close");
+            const projectDetailArticles = document.querySelectorAll(".project-detail-article");
+            let projectDetailTrigger = null; // the link that opened it, so focus can return there on close
+
+            function openProjectDetail(projectId, trigger)
+            {
+                for (const article of projectDetailArticles)
+                {
+                    const isMatch = article.dataset.project === projectId;
+                    article.classList.toggle("is-active", isMatch);
+                    if (isMatch)
+                    {
+                        // Screenshots/charts use data-src, not src, so they never download for a visit
+                        // that never opens this project — set the real src now, the first time it's seen.
+                        article.querySelectorAll("img[data-src]").forEach((img) =>
+                        {
+                            img.src = img.dataset.src;
+                            img.removeAttribute("data-src");
+                        });
+                    }
+                }
+                projectDetailTrigger = trigger ?? null;
+                projectDetailEl.classList.add("is-open");
+                document.body.classList.add("project-detail-open");
+                projectDetailCloseBtn.focus();
+            }
+
+            function closeProjectDetail()
+            {
+                if (!projectDetailEl.classList.contains("is-open"))
+                {
+                    return;
+                }
+                projectDetailEl.classList.remove("is-open");
+                document.body.classList.remove("project-detail-open");
+                if (projectDetailTrigger)
+                {
+                    projectDetailTrigger.focus();
+                }
+            }
+
+            document.querySelectorAll(".project-detail-trigger").forEach((trigger) =>
+            {
+                trigger.addEventListener("click", (event) =>
+                {
+                    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+                    {
+                        return; // let modified/middle clicks open the real page in a new tab as usual
+                    }
+                    event.preventDefault();
+                    openProjectDetail(trigger.dataset.project, trigger);
+                });
+            });
+
+            projectDetailCloseBtn.addEventListener("click", closeProjectDetail);
+
+            // Focus trap while open, matching standard dialog behavior: Tab/Shift+Tab cycle within
+            // the panel instead of escaping into the (visually covered but still-in-DOM) page behind
+            // it. offsetParent !== null skips display:none elements, which naturally excludes every
+            // inactive article's links along with anything else hidden.
+            function getFocusableEls(container)
+            {
+                return Array.from(container.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'))
+                    .filter((el) => el.offsetParent !== null);
+            }
+
+            window.addEventListener("keydown", (event) =>
+            {
+                if (!projectDetailEl.classList.contains("is-open"))
+                {
+                    return;
+                }
+                if (event.key === "Escape")
+                {
+                    closeProjectDetail();
+                    return;
+                }
+                if (event.key === "Tab")
+                {
+                    const focusable = getFocusableEls(projectDetailEl);
+                    if (focusable.length === 0)
+                    {
+                        return;
+                    }
+                    const first = focusable[0];
+                    const last = focusable[focusable.length - 1];
+                    if (event.shiftKey && document.activeElement === first)
+                    {
+                        event.preventDefault();
+                        last.focus();
+                    }
+                    else if (!event.shiftKey && document.activeElement === last)
+                    {
+                        event.preventDefault();
+                        first.focus();
+                    }
+                }
+            });
 
             measureSectionCenters();
             updateScrollProgress();
