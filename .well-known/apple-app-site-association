@@ -1,0 +1,21 @@
+{
+    "applinks": {
+        "details": [
+            {
+                "appIDs": [
+                    "URAJC2Y6MF.com.jakeahuebner.smallgroup"
+                ],
+                "components": [
+                    {
+                        "/": "/small-group/join/*",
+                        "comment": "Small Group invite links, like /small-group/join/?invite=<id>"
+                    },
+                    {
+                        "/": "/small-group/join",
+                        "comment": "The same, without the trailing slash"
+                    }
+                ]
+            }
+        ]
+    }
+}
